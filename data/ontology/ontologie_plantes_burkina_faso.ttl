@@ -1,0 +1,1796 @@
+@prefix : <http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie/> .
+
+<http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie> rdf:type owl:Ontology ;
+    rdfs:comment "Ontologie Data Vault pour l'identification des plantes et diagnostic phytosanitaire au Burkina Faso"@fr ;
+    rdfs:label "PlantOntoBF"@fr ;
+    owl:versionInfo "3.0" .
+
+
+#################################################################
+#    ANNOTATION PROPERTIES (Métadonnées Data Vault)
+#################################################################
+
+:isHub rdf:type owl:AnnotationProperty ;
+    rdfs:comment "Marque une classe comme HUB dans le modèle Data Vault" .
+
+:isLink rdf:type owl:AnnotationProperty ;
+    rdfs:comment "Marque une propriété comme LINK dans le modèle Data Vault" .
+
+:isSatellite rdf:type owl:AnnotationProperty ;
+    rdfs:comment "Marque une propriété ou classe comme SATELLITE dans le modèle Data Vault" .
+
+:lemma rdf:type owl:AnnotationProperty ;
+    rdfs:comment "Lemme standardisé pour l'extraction (sans accents, underscores)" .
+
+
+#################################################################
+#    CLASSES PRINCIPALES (HUBS)
+#################################################################
+
+### ========================================================
+### PLANTES (HUBS PRINCIPAUX)
+### ========================================================
+
+:Plant rdf:type owl:Class ;
+    rdfs:label "Plante"@fr, "Plant"@en ;
+    rdfs:comment "Classe parente pour toutes les plantes cultivées" ;
+    :isHub "true"^^xsd:boolean .
+
+:Corn rdf:type owl:Class ;
+    rdfs:subClassOf :Plant ;
+    rdfs:label "Maïs"@fr, "Corn"@en ;
+    rdfs:comment "Zea mays - Céréale de la famille des Poacées"@fr ;
+    :lemma "corn" ;
+    :isHub "true"^^xsd:boolean ;
+    owl:disjointWith :Onion, :Tomato .
+
+:Onion rdf:type owl:Class ;
+    rdfs:subClassOf :Plant ;
+    rdfs:label "Oignon"@fr, "Onion"@en ;
+    rdfs:comment "Allium cepa - Légume bulbe de la famille des Amaryllidacées"@fr ;
+    :lemma "onion" ;
+    :isHub "true"^^xsd:boolean ;
+    owl:disjointWith :Tomato .
+
+:Tomato rdf:type owl:Class ;
+    rdfs:subClassOf :Plant ;
+    rdfs:label "Tomate"@fr, "Tomato"@en ;
+    rdfs:comment "Solanum lycopersicum - Légume fruit de la famille des Solanacées"@fr ;
+    :lemma "tomato" ;
+    :isHub "true"^^xsd:boolean .
+
+### ========================================================
+### PARTIES DE LA PLANTE
+### ========================================================
+
+:PlantPart rdf:type owl:Class ;
+    rdfs:label "Partie de plante"@fr ;
+    rdfs:comment "Organe ou partie anatomique d'une plante" .
+
+:Leaf rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Feuille"@fr ;
+    :lemma "leaf" .
+
+:Fruit rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Fruit"@fr ;
+    :lemma "fruit" .
+
+:Stem rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Tige"@fr ;
+    :lemma "stem" .
+
+:Root rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Racine"@fr ;
+    :lemma "root" .
+
+:Flower rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Fleur"@fr ;
+    :lemma "flower" .
+
+:Bulb rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Bulbe"@fr ;
+    :lemma "bulb" .
+
+:Ear rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Épi"@fr ;
+    rdfs:comment "Inflorescence caractéristique du maïs" ;
+    :lemma "ear" .
+
+:Tassel rdf:type owl:Class ;
+    rdfs:subClassOf :PlantPart ;
+    rdfs:label "Panicule"@fr ;
+    rdfs:comment "Inflorescence mâle du maïs" ;
+    :lemma "tassel" .
+
+### ========================================================
+### MALADIES (SATELLITES - Entités liées)
+### ========================================================
+
+:Disease rdf:type owl:Class ;
+    rdfs:label "Maladie"@fr ;
+    rdfs:comment "Affection pathologique des plantes" ;
+    :isSatellite "true"^^xsd:boolean .
+
+:FungalDisease rdf:type owl:Class ;
+    rdfs:subClassOf :Disease ;
+    rdfs:label "Maladie fongique"@fr ;
+    rdfs:comment "Maladie causée par des champignons" .
+
+:ViralDisease rdf:type owl:Class ;
+    rdfs:subClassOf :Disease ;
+    rdfs:label "Maladie virale"@fr ;
+    rdfs:comment "Maladie causée par des virus" .
+
+:BacterialDisease rdf:type owl:Class ;
+    rdfs:subClassOf :Disease ;
+    rdfs:label "Maladie bactérienne"@fr ;
+    rdfs:comment "Maladie causée par des bactéries" .
+
+:AbioticDisorder rdf:type owl:Class ;
+    rdfs:subClassOf :Disease ;
+    rdfs:label "Trouble abiotique"@fr ;
+    rdfs:comment "Désordre causé par des facteurs non-vivants" ;
+    :lemma "stress_abiotique" .
+
+### ========================================================
+### RAVAGEURS (SATELLITES - Entités liées)
+### ========================================================
+
+:Pest rdf:type owl:Class ;
+    rdfs:label "Ravageur"@fr, "Pest"@en ;
+    rdfs:comment "Organisme nuisible aux cultures" ;
+    :isSatellite "true"^^xsd:boolean .
+
+:Insect rdf:type owl:Class ;
+    rdfs:subClassOf :Pest ;
+    rdfs:label "Insecte"@fr .
+
+:Caterpillar rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Chenille"@fr ;
+    :lemma "chenille" .
+
+:Aphid rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Puceron"@fr ;
+    :lemma "puceron" .
+
+:Whitefly rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Aleurode"@fr ;
+    :lemma "aleurode" .
+
+:Thrips rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Thrips"@fr ;
+    :lemma "thrips" .
+
+:Borer rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Foreur"@fr ;
+    :lemma "foreur_tige" .
+
+:Leafminer rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Mineuse"@fr ;
+    :lemma "mineuse" .
+
+:Leafhopper rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Cicadelle"@fr ;
+    :lemma "cicadelle" .
+
+:OnionFly rdf:type owl:Class ;
+    rdfs:subClassOf :Insect ;
+    rdfs:label "Mouche de l'oignon"@fr ;
+    :lemma "mouche" .
+
+:Noctuid rdf:type owl:Class ;
+    rdfs:subClassOf :Caterpillar ;
+    rdfs:label "Noctuelle"@fr ;
+    :lemma "noctuelle" .
+
+:FallArmyworm rdf:type owl:Class ;
+    rdfs:subClassOf :Caterpillar ;
+    rdfs:label "Chenille légionnaire"@fr ;
+    :lemma "chenille_legionnaire" .
+
+:Arachnid rdf:type owl:Class ;
+    rdfs:subClassOf :Pest ;
+    rdfs:label "Arachnide"@fr .
+
+:Mite rdf:type owl:Class ;
+    rdfs:subClassOf :Arachnid ;
+    rdfs:label "Acarien"@fr ;
+    :lemma "acarien" .
+
+:Nematode rdf:type owl:Class ;
+    rdfs:subClassOf :Pest ;
+    rdfs:label "Nématode"@fr ;
+    :lemma "nematode" .
+
+### ========================================================
+### SYMPTÔMES (SATELLITES - Attributs observables)
+### ========================================================
+
+:Symptom rdf:type owl:Class ;
+    rdfs:label "Symptôme"@fr ;
+    rdfs:comment "Manifestation visible d'une maladie ou attaque" ;
+    :isSatellite "true"^^xsd:boolean .
+
+:Chlorosis rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Chlorose"@fr ;
+    :lemma "chlorose" .
+
+:Necrosis rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Nécrose"@fr ;
+    :lemma "necrose" .
+
+:Wilting rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Flétrissement"@fr ;
+    :lemma "fletrissement" .
+
+:Lesion rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Lésion"@fr ;
+    :lemma "lesion" .
+
+:Spot rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Tache"@fr ;
+    :lemma "tache" .
+
+:Streak rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Striure"@fr ;
+    :lemma "striure" .
+
+:Mosaic rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Mosaïque"@fr ;
+    :lemma "mosaique" .
+
+:Rot rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Pourriture"@fr ;
+    :lemma "pourriture" .
+
+:Gall rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Galle"@fr ;
+    :lemma "galle" .
+
+:Deformation rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Déformation"@fr ;
+    :lemma "deformation" .
+
+:Stunting rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Nanisme"@fr ;
+    :lemma "nanisme" .
+
+:Webbing rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Toile"@fr ;
+    :lemma "toile" .
+
+:Gallery rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Galerie"@fr ;
+    :lemma "galerie" .
+
+:Honeydew rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Miellat"@fr ;
+    :lemma "miellat" .
+
+:Biting rdf:type owl:Class ;
+    rdfs:subClassOf :Symptom ;
+    rdfs:label "Morsure"@fr ;
+    :lemma "morsure" .
+
+### ========================================================
+### CARACTÉRISTIQUES MORPHOLOGIQUES (SATELLITES)
+### ========================================================
+
+:MorphologicalFeature rdf:type owl:Class ;
+    rdfs:label "Caractéristique morphologique"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+### --- Couleurs de feuilles (unifiées) ---
+
+:LeafColor rdf:type owl:Class ;
+    rdfs:subClassOf :MorphologicalFeature ;
+    rdfs:label "Couleur de feuille"@fr .
+
+:DarkGreen rdf:type owl:Class ;
+    rdfs:subClassOf :LeafColor ;
+    rdfs:label "Vert foncé"@fr ;
+    :lemma "vert_fonce" .
+
+:LightGreen rdf:type owl:Class ;
+    rdfs:subClassOf :LeafColor ;
+    rdfs:label "Vert clair"@fr ;
+    :lemma "vert_clair" .
+
+:Yellow rdf:type owl:Class ;
+    rdfs:subClassOf :LeafColor ;
+    rdfs:label "Jaune"@fr ;
+    :lemma "jaune" .
+
+:Brown rdf:type owl:Class ;
+    rdfs:subClassOf :LeafColor ;
+    rdfs:label "Brun"@fr ;
+    :lemma "brun" .
+
+:BluishGreen rdf:type owl:Class ;
+    rdfs:subClassOf :LeafColor ;
+    rdfs:label "Vert bleuâtre"@fr ;
+    :lemma "vert_bleuatre" .
+
+:GrayishGreen rdf:type owl:Class ;
+    rdfs:subClassOf :LeafColor ;
+    rdfs:label "Vert grisâtre"@fr ;
+    :lemma "vert_grisatre" .
+
+:YellowishGreen rdf:type owl:Class ;
+    rdfs:subClassOf :LeafColor ;
+    rdfs:label "Vert jaunâtre"@fr ;
+    :lemma "vert_jaunatre" .
+
+### --- Formes de feuilles (unifiées) ---
+
+:LeafShape rdf:type owl:Class ;
+    rdfs:subClassOf :MorphologicalFeature ;
+    rdfs:label "Forme de feuille"@fr .
+
+:LinearLanceolate rdf:type owl:Class ;
+    rdfs:subClassOf :LeafShape ;
+    rdfs:label "Linéaire-lancéolée"@fr ;
+    rdfs:comment "Forme caractéristique du maïs"@fr ;
+    :lemma "lineaire_lanceolee" .
+
+:OddPinnate rdf:type owl:Class ;
+    rdfs:subClassOf :LeafShape ;
+    rdfs:label "Composée imparipennée"@fr ;
+    rdfs:comment "Forme caractéristique de la tomate"@fr ;
+    :lemma "composee_imparipennee" .
+
+:TubularCylindrical rdf:type owl:Class ;
+    rdfs:subClassOf :LeafShape ;
+    rdfs:label "Tubulaire cylindrique"@fr ;
+    rdfs:comment "Forme caractéristique de l'oignon"@fr ;
+    :lemma "tubulaire_cylindrique" .
+
+:SimpleLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :LeafShape ;
+    rdfs:label "Simple"@fr ;
+    :lemma "simple" .
+
+:CompoundLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :LeafShape ;
+    rdfs:label "Composée"@fr ;
+    :lemma "composee" .
+
+:SimpleTubular rdf:type owl:Class ;
+    rdfs:subClassOf :LeafShape ;
+    rdfs:label "Simple tubulaire"@fr ;
+    :lemma "simple_tubulaire" .
+
+### --- Textures de feuilles (unifiées) ---
+
+:LeafTexture rdf:type owl:Class ;
+    rdfs:subClassOf :MorphologicalFeature ;
+    rdfs:label "Texture de feuille"@fr .
+
+:Smooth rdf:type owl:Class ;
+    rdfs:subClassOf :LeafTexture ;
+    rdfs:label "Lisse"@fr ;
+    :lemma "lisse" .
+
+:Pubescent rdf:type owl:Class ;
+    rdfs:subClassOf :LeafTexture ;
+    rdfs:label "Pubescente"@fr ;
+    :lemma "pubescente" .
+
+:Glandular rdf:type owl:Class ;
+    rdfs:subClassOf :LeafTexture ;
+    rdfs:label "Glanduleuse"@fr ;
+    :lemma "glanduleuse" .
+
+:SmoothWaxy rdf:type owl:Class ;
+    rdfs:subClassOf :LeafTexture ;
+    rdfs:label "Lisse et cireuse"@fr ;
+    :lemma "lisse_cireuse" .
+
+:Hollow rdf:type owl:Class ;
+    rdfs:subClassOf :LeafTexture ;
+    rdfs:label "Creuse"@fr ;
+    :lemma "creuse" .
+
+:SlightlyRough rdf:type owl:Class ;
+    rdfs:subClassOf :LeafTexture ;
+    rdfs:label "Légèrement rugueuse"@fr ;
+    :lemma "legerement_rugueuse" .
+
+### --- Nervation (unifiée) ---
+
+:VenationType rdf:type owl:Class ;
+    rdfs:subClassOf :MorphologicalFeature ;
+    rdfs:label "Type de nervation"@fr .
+
+:ParallelVenation rdf:type owl:Class ;
+    rdfs:subClassOf :VenationType ;
+    rdfs:label "Nervation parallèle"@fr ;
+    rdfs:comment "Typique des monocotylédones (maïs, oignon)"@fr ;
+    :lemma "nervation_parallele" .
+
+:ReticulateVenation rdf:type owl:Class ;
+    rdfs:subClassOf :VenationType ;
+    rdfs:label "Nervation réticulée"@fr ;
+    rdfs:comment "Typique des dicotylédones (tomate)"@fr ;
+    :lemma "nervation_reticulee" .
+
+### ========================================================
+### ÉTAT DE LA FEUILLE (SATELLITES - Attributs observables)
+### ========================================================
+
+:LeafCondition rdf:type owl:Class ;
+    rdfs:label "État de la feuille"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+### --- États d'hydratation ---
+
+:HydrationState rdf:type owl:Class ;
+    rdfs:subClassOf :LeafCondition ;
+    rdfs:label "État d'hydratation"@fr .
+
+:Turgescent rdf:type owl:Class ;
+    rdfs:subClassOf :HydrationState ;
+    rdfs:label "Turgescente"@fr ;
+    :lemma "turgescente" .
+
+:WiltedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :HydrationState ;
+    rdfs:label "Flétrie"@fr ;
+    :lemma "fletrie" .
+
+:DryLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :HydrationState ;
+    rdfs:label "Sèche"@fr ;
+    :lemma "seche" .
+
+:CrispyLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :HydrationState ;
+    rdfs:label "Cassante"@fr ;
+    :lemma "cassante" .
+
+### --- États de santé ---
+
+:HealthCondition rdf:type owl:Class ;
+    rdfs:subClassOf :LeafCondition ;
+    rdfs:label "État de santé"@fr .
+
+:HealthyLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :HealthCondition ;
+    rdfs:label "Saine"@fr ;
+    :lemma "saine" .
+
+:DiseasedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :HealthCondition ;
+    rdfs:label "Malade"@fr ;
+    :lemma "malade" .
+
+:DyingLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :HealthCondition ;
+    rdfs:label "Mourante"@fr ;
+    :lemma "mourante" .
+
+:DeadLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :HealthCondition ;
+    rdfs:label "Morte"@fr ;
+    :lemma "morte" .
+
+### --- États de coloration ---
+
+:ColorCondition rdf:type owl:Class ;
+    rdfs:subClassOf :LeafCondition ;
+    rdfs:label "État de coloration"@fr .
+
+:ChloroticLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :ColorCondition ;
+    rdfs:label "Chlorotique"@fr ;
+    :lemma "chlorotique" .
+
+:NecroticLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :ColorCondition ;
+    rdfs:label "Nécrotique"@fr ;
+    :lemma "necrotique" .
+
+:BurnedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :ColorCondition ;
+    rdfs:label "Brûlée"@fr ;
+    :lemma "brulee" .
+
+:BleachedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :ColorCondition ;
+    rdfs:label "Décolorée"@fr ;
+    :lemma "decoloree" .
+
+:ReddenedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :ColorCondition ;
+    rdfs:label "Rougie"@fr ;
+    :lemma "rougie" .
+
+### --- États structurels ---
+
+:StructuralCondition rdf:type owl:Class ;
+    rdfs:subClassOf :LeafCondition ;
+    rdfs:label "État structural"@fr .
+
+:CurledLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Enroulée"@fr ;
+    :lemma "enroulee" .
+
+:TwistedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Tordue"@fr ;
+    :lemma "tordue" .
+
+:CrinkledLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Froissée"@fr ;
+    :lemma "froissee" .
+
+:DroopingLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Tombante"@fr ;
+    :lemma "tombante" .
+
+:ErectLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Dressée"@fr ;
+    :lemma "dressee" .
+
+:FlattenedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Aplatie"@fr ;
+    :lemma "aplatie" .
+
+:ShriveledLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Ratatinée"@fr ;
+    :lemma "ratatinee" .
+
+:PerforatedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Perforée"@fr ;
+    :lemma "perforee" .
+
+:TornLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :StructuralCondition ;
+    rdfs:label "Déchirée"@fr ;
+    :lemma "dechiree" .
+
+### --- États de surface ---
+
+:SurfaceCondition rdf:type owl:Class ;
+    rdfs:subClassOf :LeafCondition ;
+    rdfs:label "État de surface"@fr .
+
+:SpottedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Tachetée"@fr ;
+    :lemma "tachetee" .
+
+:StreakedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Striée"@fr ;
+    :lemma "striee" .
+
+:MottledLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Marbrée"@fr ;
+    :lemma "marbree" .
+
+:DustyLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Poudreuse"@fr ;
+    :lemma "poudreuse" .
+
+:StickyLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Collante"@fr ;
+    :lemma "collante" .
+
+:SootyLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Fumagine"@fr ;
+    :lemma "fumagine" .
+
+:WebbedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Entoilée"@fr ;
+    :lemma "entoilee" .
+
+:MinedLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :SurfaceCondition ;
+    rdfs:label "Minée"@fr ;
+    :lemma "minee" .
+
+### --- États de maturité ---
+
+:MaturityCondition rdf:type owl:Class ;
+    rdfs:subClassOf :LeafCondition ;
+    rdfs:label "État de maturité"@fr .
+
+:YoungLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :MaturityCondition ;
+    rdfs:label "Jeune"@fr ;
+    :lemma "jeune" .
+
+:MatureLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :MaturityCondition ;
+    rdfs:label "Mature"@fr ;
+    :lemma "mature" .
+
+:SenescentLeaf rdf:type owl:Class ;
+    rdfs:subClassOf :MaturityCondition ;
+    rdfs:label "Sénescente"@fr ;
+    :lemma "senescente" .
+
+### ========================================================
+### ÉTAT DE SANTÉ GLOBAL
+### ========================================================
+
+:HealthStatus rdf:type owl:Class ;
+    rdfs:label "État de santé"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:Healthy rdf:type owl:Class ;
+    rdfs:subClassOf :HealthStatus ;
+    rdfs:label "Sain"@fr ;
+    rdfs:comment "Plante en bonne santé sans symptômes de maladie ni infestation"@fr ;
+    :lemma "sain" .
+
+:HealthyFeminine rdf:type owl:Class ;
+    rdfs:subClassOf :HealthStatus ;
+    owl:equivalentClass :Healthy ;
+    rdfs:label "Saine"@fr ;
+    rdfs:comment "Forme féminine de sain (pour accord avec plante/feuille)"@fr ;
+    :lemma "saine" .
+
+:Diseased rdf:type owl:Class ;
+    rdfs:subClassOf :HealthStatus ;
+    rdfs:label "Malade"@fr ;
+    rdfs:comment "Plante présentant des symptômes de maladie"@fr ;
+    :lemma "malade" .
+
+:Stressed rdf:type owl:Class ;
+    rdfs:subClassOf :HealthStatus ;
+    rdfs:label "Stressé"@fr ;
+    rdfs:comment "Plante soumise à un stress abiotique"@fr ;
+    :lemma "stresse" .
+
+:Infested rdf:type owl:Class ;
+    rdfs:subClassOf :HealthStatus ;
+    rdfs:label "Infesté"@fr ;
+    rdfs:comment "Plante attaquée par des ravageurs"@fr ;
+    :lemma "infeste" .
+
+:Vigorous rdf:type owl:Class ;
+    rdfs:subClassOf :HealthStatus ;
+    rdfs:label "Vigoureux"@fr ;
+    rdfs:comment "Plante en croissance active et vigoureuse"@fr ;
+    :lemma "vigoureux" .
+
+### ========================================================
+### IMAGE ET OBSERVATION
+### ========================================================
+
+:Image rdf:type owl:Class ;
+    rdfs:label "Image"@fr .
+
+:Observation rdf:type owl:Class ;
+    rdfs:label "Observation"@fr ;
+    rdfs:comment "Classe de liaison pour une détection/identification" .
+
+
+#################################################################
+#    OBJECT PROPERTIES (LINKS)
+#################################################################
+
+### ========================================================
+### Relations Plante <-> Parties
+### ========================================================
+
+:has_part rdf:type owl:ObjectProperty ;
+    rdfs:domain :Plant ;
+    rdfs:range :PlantPart ;
+    rdfs:label "a pour partie"@fr ;
+    :lemma "has_part" .
+
+:is_part_of rdf:type owl:ObjectProperty ;
+    owl:inverseOf :has_part ;
+    rdfs:domain :PlantPart ;
+    rdfs:range :Plant ;
+    rdfs:label "est partie de"@fr .
+
+### ========================================================
+### Relations Plante <-> Maladies (LINK PRINCIPAL)
+### ========================================================
+
+:has_disease rdf:type owl:ObjectProperty ;
+    rdfs:domain :Plant ;
+    rdfs:range :Disease ;
+    rdfs:label "a pour maladie"@fr ;
+    :isLink "true"^^xsd:boolean ;
+    :lemma "has_disease" .
+
+:affects_plant rdf:type owl:ObjectProperty ;
+    owl:inverseOf :has_disease ;
+    rdfs:domain :Disease ;
+    rdfs:range :Plant ;
+    rdfs:label "affecte la plante"@fr .
+
+:affects_plant_part rdf:type owl:ObjectProperty ;
+    rdfs:domain :Disease ;
+    rdfs:range :PlantPart ;
+    rdfs:label "affecte la partie"@fr .
+
+### ========================================================
+### Relations Plante <-> Ravageurs (LINK PRINCIPAL)
+### ========================================================
+
+:has_infestation rdf:type owl:ObjectProperty ;
+    rdfs:domain :Plant ;
+    rdfs:range :Pest ;
+    rdfs:label "est infesté par"@fr ;
+    :isLink "true"^^xsd:boolean ;
+    :lemma "has_infestation" .
+
+:attacks_plant rdf:type owl:ObjectProperty ;
+    owl:inverseOf :has_infestation ;
+    rdfs:domain :Pest ;
+    rdfs:range :Plant ;
+    rdfs:label "attaque la plante"@fr .
+
+:attacks_plant_part rdf:type owl:ObjectProperty ;
+    rdfs:domain :Pest ;
+    rdfs:range :PlantPart ;
+    rdfs:label "attaque la partie"@fr .
+
+### ========================================================
+### Relations État de santé (LINK PRINCIPAL)
+### ========================================================
+
+:has_health_status rdf:type owl:ObjectProperty ;
+    rdfs:domain :Plant ;
+    rdfs:range :HealthStatus ;
+    rdfs:label "a pour état de santé"@fr ;
+    :isLink "true"^^xsd:boolean ;
+    :lemma "has_health_status" .
+
+### ========================================================
+### Relations Ravageurs <-> Maladies
+### ========================================================
+
+:transmits_disease rdf:type owl:ObjectProperty ;
+    rdfs:domain :Pest ;
+    rdfs:range :Disease ;
+    rdfs:label "transmet la maladie"@fr .
+
+:is_transmitted_by rdf:type owl:ObjectProperty ;
+    owl:inverseOf :transmits_disease ;
+    rdfs:domain :Disease ;
+    rdfs:range :Pest ;
+    rdfs:label "est transmise par"@fr .
+
+:causes_disease rdf:type owl:ObjectProperty ;
+    rdfs:domain :Pest ;
+    rdfs:range :Disease ;
+    rdfs:label "cause la maladie"@fr .
+
+:favors_infestation rdf:type owl:ObjectProperty ;
+    rdfs:domain :Disease ;
+    rdfs:range :Pest ;
+    rdfs:label "favorise l'infestation"@fr .
+
+### ========================================================
+### Relations Maladies/Ravageurs <-> Symptômes
+### ========================================================
+
+:has_symptom rdf:type owl:ObjectProperty ;
+    rdfs:domain :Disease ;
+    rdfs:range :Symptom ;
+    rdfs:label "a pour symptôme"@fr .
+
+:is_symptom_of rdf:type owl:ObjectProperty ;
+    owl:inverseOf :has_symptom ;
+    rdfs:domain :Symptom ;
+    rdfs:range :Disease ;
+    rdfs:label "est symptôme de"@fr .
+
+:causes_damage rdf:type owl:ObjectProperty ;
+    rdfs:domain :Pest ;
+    rdfs:range :Symptom ;
+    rdfs:label "cause le dégât"@fr .
+
+:is_damage_caused_by rdf:type owl:ObjectProperty ;
+    owl:inverseOf :causes_damage ;
+    rdfs:domain :Symptom ;
+    rdfs:range :Pest ;
+    rdfs:label "est dégât causé par"@fr .
+
+### ========================================================
+### Relations Caractéristiques morphologiques
+### ========================================================
+
+:has_morphological_feature rdf:type owl:ObjectProperty ;
+    rdfs:domain :Plant, :PlantPart ;
+    rdfs:range :MorphologicalFeature ;
+    rdfs:label "a pour caractéristique"@fr .
+
+:has_leaf_color rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :has_morphological_feature ;
+    rdfs:domain :Plant, :Leaf ;
+    rdfs:range :LeafColor ;
+    rdfs:label "a pour couleur de feuille"@fr .
+
+:has_leaf_texture rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :has_morphological_feature ;
+    rdfs:domain :Plant, :Leaf ;
+    rdfs:range :LeafTexture ;
+    rdfs:label "a pour texture de feuille"@fr .
+
+:has_leaf_shape rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :has_morphological_feature ;
+    rdfs:domain :Plant, :Leaf ;
+    rdfs:range :LeafShape ;
+    rdfs:label "a pour forme de feuille"@fr .
+
+:has_venation_type rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :has_morphological_feature ;
+    rdfs:domain :Plant, :Leaf ;
+    rdfs:range :VenationType ;
+    rdfs:label "a pour type de nervation"@fr .
+
+### ========================================================
+### Relations État des feuilles
+### ========================================================
+
+:has_leaf_condition rdf:type owl:ObjectProperty ;
+    rdfs:domain :Leaf, :Plant ;
+    rdfs:range :LeafCondition ;
+    rdfs:label "a pour état de feuille"@fr .
+
+:indicates_disease rdf:type owl:ObjectProperty ;
+    rdfs:domain :LeafCondition ;
+    rdfs:range :Disease ;
+    rdfs:label "indique la maladie"@fr .
+
+:indicates_pest rdf:type owl:ObjectProperty ;
+    rdfs:domain :LeafCondition ;
+    rdfs:range :Pest ;
+    rdfs:label "indique le ravageur"@fr .
+
+:indicates_deficiency rdf:type owl:ObjectProperty ;
+    rdfs:domain :LeafCondition ;
+    rdfs:range :AbioticDisorder ;
+    rdfs:label "indique une carence"@fr .
+
+:causes_leaf_condition rdf:type owl:ObjectProperty ;
+    rdfs:domain :Disease, :Pest ;
+    rdfs:range :LeafCondition ;
+    rdfs:label "cause l'état de feuille"@fr .
+
+### ========================================================
+### Relations Image/Observation
+### ========================================================
+
+:has_observation rdf:type owl:ObjectProperty ;
+    rdfs:domain :Image ;
+    rdfs:range :Observation ;
+    rdfs:label "a pour observation"@fr .
+
+:observes_plant rdf:type owl:ObjectProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range :Plant ;
+    rdfs:label "observe la plante"@fr .
+
+:detects_disease rdf:type owl:ObjectProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range :Disease ;
+    rdfs:label "détecte la maladie"@fr .
+
+:detects_pest rdf:type owl:ObjectProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range :Pest ;
+    rdfs:label "détecte le ravageur"@fr .
+
+:detects_symptom rdf:type owl:ObjectProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range :Symptom ;
+    rdfs:label "détecte le symptôme"@fr .
+
+:detects_feature rdf:type owl:ObjectProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range :MorphologicalFeature ;
+    rdfs:label "détecte la caractéristique"@fr .
+
+:detects_leaf_condition rdf:type owl:ObjectProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range :LeafCondition ;
+    rdfs:label "détecte l'état de feuille"@fr .
+
+:identifies_as rdf:type owl:ObjectProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range :Plant ;
+    rdfs:label "identifie comme"@fr .
+
+
+#################################################################
+#    DATA PROPERTIES (SATELLITES - Attributs scalaires)
+#################################################################
+
+### ========================================================
+### Propriétés Image
+### ========================================================
+
+:image_path rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Image ;
+    rdfs:range xsd:string ;
+    rdfs:label "chemin de l'image"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:capture_date rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Image ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "date de capture"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:image_source rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Image ;
+    rdfs:range xsd:string ;
+    rdfs:label "source de l'image"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:image_resolution rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Image ;
+    rdfs:range xsd:string ;
+    rdfs:label "résolution"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+### ========================================================
+### Propriétés Observation
+### ========================================================
+
+:confidence rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range xsd:float ;
+    rdfs:label "score de confiance"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:extracted_lemmas rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range xsd:string ;
+    rdfs:label "lemmes extraits"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:severity rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range xsd:string ;
+    rdfs:label "sévérité"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:observation_date rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "date d'observation"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:model_used rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Observation ;
+    rdfs:range xsd:string ;
+    rdfs:label "modèle utilisé"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+### ========================================================
+### Propriétés Plante
+### ========================================================
+
+:scientific_name rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Plant ;
+    rdfs:range xsd:string ;
+    rdfs:label "nom scientifique"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:common_name rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Plant ;
+    rdfs:range rdf:langString ;
+    rdfs:label "nom commun"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:family rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Plant ;
+    rdfs:range xsd:string ;
+    rdfs:label "famille botanique"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+### ========================================================
+### Propriétés Maladie/Ravageur
+### ========================================================
+
+:description rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Disease, :Pest, :Symptom ;
+    rdfs:range rdf:langString ;
+    rdfs:label "description"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:treatment_recommendation rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Disease, :Pest ;
+    rdfs:range rdf:langString ;
+    rdfs:label "recommandation de traitement"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+:prevention_method rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Disease, :Pest ;
+    rdfs:range rdf:langString ;
+    rdfs:label "méthode de prévention"@fr ;
+    :isSatellite "true"^^xsd:boolean .
+
+
+#################################################################
+#    INSTANCES - MALADIES DU MAÏS
+#################################################################
+
+:fusariose_corn rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Fusariose du maïs"@fr ;
+    :lemma "fusariose" ;
+    :affects_plant :Corn ;
+    :affects_plant_part :Leaf, :Ear, :Stem ;
+    :has_symptom :chlorosis_inst, :necrosis_inst, :rot_inst ;
+    :causes_leaf_condition :WiltedLeaf, :ChloroticLeaf, :NecroticLeaf ;
+    :description "Maladie fongique causée par Fusarium spp."@fr .
+
+:helminthosporiose_corn rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Helminthosporiose du maïs"@fr ;
+    :lemma "helminthosporiose" ;
+    :affects_plant :Corn ;
+    :affects_plant_part :Leaf ;
+    :has_symptom :lesion_inst, :spot_inst ;
+    :causes_leaf_condition :SpottedLeaf, :NecroticLeaf ;
+    :description "Maladie causée par Helminthosporium turcicum"@fr .
+
+:rouille_corn rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Rouille du maïs"@fr ;
+    :lemma "rouille" ;
+    :affects_plant :Corn ;
+    :affects_plant_part :Leaf ;
+    :has_symptom :spot_inst ;
+    :causes_leaf_condition :SpottedLeaf, :DustyLeaf ;
+    :description "Maladie causée par Puccinia spp."@fr .
+
+:curvulariose_corn rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Curvulariose du maïs"@fr ;
+    :lemma "curvulariose" ;
+    :affects_plant :Corn ;
+    :affects_plant_part :Leaf ;
+    :has_symptom :spot_inst, :necrosis_inst ;
+    :causes_leaf_condition :SpottedLeaf, :NecroticLeaf ;
+    :description "Taches foliaires causées par Curvularia spp."@fr .
+
+:striure_corn rdf:type owl:NamedIndividual, :ViralDisease ;
+    rdfs:label "Striure du maïs"@fr ;
+    :lemma "striure" ;
+    :affects_plant :Corn ;
+    :affects_plant_part :Leaf ;
+    :has_symptom :streak_inst, :chlorosis_inst ;
+    :is_transmitted_by :cicadelle_corn ;
+    :causes_leaf_condition :StreakedLeaf, :ChloroticLeaf ;
+    :description "Virus MSV transmis par cicadelles"@fr .
+
+:virose_corn rdf:type owl:NamedIndividual, :ViralDisease ;
+    rdfs:label "Virose du maïs"@fr ;
+    :lemma "virose" ;
+    :affects_plant :Corn ;
+    :has_symptom :mosaic_inst, :stunting_inst ;
+    :causes_leaf_condition :MottledLeaf, :CrinkledLeaf, :TwistedLeaf ;
+    :description "Ensemble de maladies virales"@fr .
+
+:stress_abiotique_corn rdf:type owl:NamedIndividual, :AbioticDisorder ;
+    rdfs:label "Stress abiotique maïs"@fr ;
+    :lemma "stress_abiotique" ;
+    :affects_plant :Corn ;
+    :has_symptom :chlorosis_inst, :wilting_inst ;
+    :causes_leaf_condition :WiltedLeaf, :DryLeaf, :BurnedLeaf, :DroopingLeaf, :ReddenedLeaf ;
+    :description "Stress hydrique, thermique ou carences"@fr .
+
+
+#################################################################
+#    INSTANCES - MALADIES DE LA TOMATE
+#################################################################
+
+:alternariose_tomato rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Alternariose de la tomate"@fr ;
+    :lemma "alternariose" ;
+    :affects_plant :Tomato ;
+    :affects_plant_part :Leaf, :Fruit, :Stem ;
+    :has_symptom :spot_inst, :necrosis_inst ;
+    :causes_leaf_condition :SpottedLeaf, :NecroticLeaf ;
+    :description "Maladie causée par Alternaria solani"@fr .
+
+:mildiou_tomato rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Mildiou de la tomate"@fr ;
+    :lemma "mildiou" ;
+    :affects_plant :Tomato ;
+    :affects_plant_part :Leaf, :Fruit ;
+    :has_symptom :spot_inst, :rot_inst ;
+    :causes_leaf_condition :SpottedLeaf ;
+    :description "Maladie causée par Phytophthora infestans"@fr .
+
+:fusariose_tomato rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Fusariose de la tomate"@fr ;
+    :lemma "fusariose" ;
+    :affects_plant :Tomato ;
+    :affects_plant_part :Root, :Stem ;
+    :has_symptom :wilting_inst, :chlorosis_inst ;
+    :causes_leaf_condition :WiltedLeaf, :DroopingLeaf, :ChloroticLeaf ;
+    :description "Flétrissement fusarien"@fr .
+
+:bacterial_wilt_tomato rdf:type owl:NamedIndividual, :BacterialDisease ;
+    rdfs:label "Flétrissement bactérien tomate"@fr ;
+    :lemma "bacterial_wilt" ;
+    :affects_plant :Tomato ;
+    :affects_plant_part :Stem, :Root ;
+    :has_symptom :wilting_inst ;
+    :causes_leaf_condition :WiltedLeaf, :DroopingLeaf ;
+    :description "Causé par Ralstonia solanacearum"@fr .
+
+:virus_tylcv_tomato rdf:type owl:NamedIndividual, :ViralDisease ;
+    rdfs:label "TYLCV - Enroulement foliaire"@fr ;
+    :lemma "virus_tylcv" ;
+    :affects_plant :Tomato ;
+    :affects_plant_part :Leaf ;
+    :has_symptom :deformation_inst, :chlorosis_inst, :stunting_inst ;
+    :is_transmitted_by :aleurode_tomato ;
+    :causes_leaf_condition :CurledLeaf, :ChloroticLeaf, :CrinkledLeaf ;
+    :description "Virus transmis par Bemisia tabaci"@fr .
+
+:stress_abiotique_tomato rdf:type owl:NamedIndividual, :AbioticDisorder ;
+    rdfs:label "Stress abiotique tomate"@fr ;
+    :lemma "stress_abiotique" ;
+    :affects_plant :Tomato ;
+    :has_symptom :chlorosis_inst, :wilting_inst, :necrosis_inst ;
+    :causes_leaf_condition :WiltedLeaf, :BurnedLeaf, :DroopingLeaf ;
+    :description "Stress hydrique, carences, coup de soleil"@fr .
+
+
+#################################################################
+#    INSTANCES - MALADIES DE L'OIGNON
+#################################################################
+
+:alternariose_onion rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Alternariose de l'oignon"@fr ;
+    :lemma "alternariose" ;
+    :affects_plant :Onion ;
+    :affects_plant_part :Leaf ;
+    :has_symptom :spot_inst, :necrosis_inst ;
+    :causes_leaf_condition :SpottedLeaf, :NecroticLeaf ;
+    :description "Maladie causée par Alternaria porri"@fr .
+
+:mildiou_onion rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Mildiou de l'oignon"@fr ;
+    :lemma "mildiou" ;
+    :affects_plant :Onion ;
+    :affects_plant_part :Leaf ;
+    :has_symptom :spot_inst, :chlorosis_inst ;
+    :causes_leaf_condition :SpottedLeaf, :ChloroticLeaf ;
+    :description "Maladie causée par Peronospora destructor"@fr .
+
+:pourriture_blanche_onion rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Pourriture blanche oignon"@fr ;
+    :lemma "pourriture_blanche" ;
+    :affects_plant :Onion ;
+    :affects_plant_part :Bulb, :Root ;
+    :has_symptom :rot_inst ;
+    :description "Causée par Sclerotium cepivorum"@fr .
+
+:fusariose_onion rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Fusariose de l'oignon"@fr ;
+    :lemma "fusariose" ;
+    :affects_plant :Onion ;
+    :affects_plant_part :Bulb, :Root ;
+    :has_symptom :rot_inst, :wilting_inst ;
+    :causes_leaf_condition :WiltedLeaf ;
+    :description "Pourriture causée par Fusarium spp."@fr .
+
+:bacteriose_onion rdf:type owl:NamedIndividual, :BacterialDisease ;
+    rdfs:label "Bactériose de l'oignon"@fr ;
+    :lemma "bacteriose" ;
+    :affects_plant :Onion ;
+    :affects_plant_part :Bulb ;
+    :has_symptom :rot_inst ;
+    :description "Pourriture molle bactérienne"@fr .
+
+:stress_abiotique_onion rdf:type owl:NamedIndividual, :AbioticDisorder ;
+    rdfs:label "Stress abiotique oignon"@fr ;
+    :lemma "stress_abiotique" ;
+    :affects_plant :Onion ;
+    :has_symptom :chlorosis_inst, :wilting_inst ;
+    :causes_leaf_condition :WiltedLeaf, :ShriveledLeaf, :BurnedLeaf ;
+    :description "Stress hydrique ou carences"@fr .
+
+
+#################################################################
+#    INSTANCES - RAVAGEURS DU MAÏS
+#################################################################
+
+:foreur_tige_corn rdf:type owl:NamedIndividual, :Borer ;
+    rdfs:label "Foreur de tige du maïs"@fr ;
+    :lemma "foreur_tige" ;
+    :attacks_plant :Corn ;
+    :attacks_plant_part :Stem, :Ear ;
+    :causes_damage :gallery_inst ;
+    :favors_infestation :fusariose_corn ;
+    :description "Sesamia calamistis et Busseola fusca"@fr .
+
+:chenille_legionnaire_corn rdf:type owl:NamedIndividual, :FallArmyworm ;
+    rdfs:label "Chenille légionnaire d'automne"@fr ;
+    :lemma "chenille_legionnaire" ;
+    :attacks_plant :Corn ;
+    :attacks_plant_part :Leaf, :Ear ;
+    :causes_damage :biting_inst ;
+    :causes_leaf_condition :PerforatedLeaf ;
+    :description "Spodoptera frugiperda"@fr .
+
+:puceron_corn rdf:type owl:NamedIndividual, :Aphid ;
+    rdfs:label "Puceron du maïs"@fr ;
+    :lemma "puceron" ;
+    :attacks_plant :Corn ;
+    :attacks_plant_part :Leaf ;
+    :causes_damage :honeydew_inst, :chlorosis_inst ;
+    :transmits_disease :virose_corn ;
+    :causes_leaf_condition :StickyLeaf, :SootyLeaf, :ChloroticLeaf ;
+    :description "Rhopalosiphum maidis"@fr .
+
+:cicadelle_corn rdf:type owl:NamedIndividual, :Leafhopper ;
+    rdfs:label "Cicadelle du maïs"@fr ;
+    :lemma "cicadelle" ;
+    :attacks_plant :Corn ;
+    :attacks_plant_part :Leaf ;
+    :transmits_disease :striure_corn ;
+    :description "Cicadulina mbila"@fr .
+
+
+#################################################################
+#    INSTANCES - RAVAGEURS DE LA TOMATE
+#################################################################
+
+:aleurode_tomato rdf:type owl:NamedIndividual, :Whitefly ;
+    rdfs:label "Aleurode de la tomate"@fr ;
+    :lemma "aleurode" ;
+    :attacks_plant :Tomato ;
+    :attacks_plant_part :Leaf ;
+    :causes_damage :honeydew_inst ;
+    :transmits_disease :virus_tylcv_tomato ;
+    :causes_leaf_condition :StickyLeaf, :SootyLeaf ;
+    :description "Bemisia tabaci"@fr .
+
+:acarien_tomato rdf:type owl:NamedIndividual, :Mite ;
+    rdfs:label "Acarien de la tomate"@fr ;
+    :lemma "acarien" ;
+    :attacks_plant :Tomato ;
+    :attacks_plant_part :Leaf ;
+    :causes_damage :webbing_inst, :chlorosis_inst ;
+    :causes_leaf_condition :WebbedLeaf, :ChloroticLeaf, :ShriveledLeaf ;
+    :description "Tetranychus spp."@fr .
+
+:mineuse_tomato rdf:type owl:NamedIndividual, :Leafminer ;
+    rdfs:label "Mineuse de la tomate"@fr ;
+    :lemma "mineuse" ;
+    :attacks_plant :Tomato ;
+    :attacks_plant_part :Leaf ;
+    :causes_damage :gallery_inst ;
+    :causes_leaf_condition :MinedLeaf ;
+    :description "Tuta absoluta"@fr .
+
+:noctuelle_tomato rdf:type owl:NamedIndividual, :Noctuid ;
+    rdfs:label "Noctuelle de la tomate"@fr ;
+    :lemma "noctuelle" ;
+    :attacks_plant :Tomato ;
+    :attacks_plant_part :Fruit, :Leaf ;
+    :causes_damage :biting_inst ;
+    :causes_leaf_condition :PerforatedLeaf ;
+    :description "Helicoverpa armigera"@fr .
+
+:thrips_tomato rdf:type owl:NamedIndividual, :Thrips ;
+    rdfs:label "Thrips de la tomate"@fr ;
+    :lemma "thrips" ;
+    :attacks_plant :Tomato ;
+    :attacks_plant_part :Leaf, :Flower ;
+    :causes_damage :deformation_inst ;
+    :causes_leaf_condition :TwistedLeaf ;
+    :description "Frankliniella spp."@fr .
+
+:puceron_tomato rdf:type owl:NamedIndividual, :Aphid ;
+    rdfs:label "Puceron de la tomate"@fr ;
+    :lemma "puceron" ;
+    :attacks_plant :Tomato ;
+    :attacks_plant_part :Leaf ;
+    :causes_damage :honeydew_inst, :deformation_inst ;
+    :causes_leaf_condition :StickyLeaf, :SootyLeaf, :CurledLeaf ;
+    :description "Myzus persicae"@fr .
+
+:nematode_tomato rdf:type owl:NamedIndividual, :Nematode ;
+    rdfs:label "Nématode à galles"@fr ;
+    :lemma "nematode" ;
+    :attacks_plant :Tomato ;
+    :attacks_plant_part :Root ;
+    :causes_damage :gall_inst, :stunting_inst ;
+    :description "Meloidogyne spp."@fr .
+
+
+#################################################################
+#    INSTANCES - RAVAGEURS DE L'OIGNON
+#################################################################
+
+:thrips_onion rdf:type owl:NamedIndividual, :Thrips ;
+    rdfs:label "Thrips de l'oignon"@fr ;
+    :lemma "thrips" ;
+    :attacks_plant :Onion ;
+    :attacks_plant_part :Leaf ;
+    :causes_damage :streak_inst, :deformation_inst ;
+    :causes_leaf_condition :StreakedLeaf, :CurledLeaf ;
+    :description "Thrips tabaci"@fr .
+
+:mouche_onion rdf:type owl:NamedIndividual, :OnionFly ;
+    rdfs:label "Mouche de l'oignon"@fr ;
+    :lemma "mouche" ;
+    :attacks_plant :Onion ;
+    :attacks_plant_part :Bulb, :Root ;
+    :causes_damage :rot_inst, :gallery_inst ;
+    :description "Delia antiqua"@fr .
+
+:chenille_onion rdf:type owl:NamedIndividual, :Caterpillar ;
+    rdfs:label "Chenille de l'oignon"@fr ;
+    :lemma "chenille" ;
+    :attacks_plant :Onion ;
+    :attacks_plant_part :Leaf ;
+    :causes_damage :biting_inst ;
+    :causes_leaf_condition :PerforatedLeaf ;
+    :description "Spodoptera exigua"@fr .
+
+:nematode_onion rdf:type owl:NamedIndividual, :Nematode ;
+    rdfs:label "Nématode de l'oignon"@fr ;
+    :lemma "nematode" ;
+    :attacks_plant :Onion ;
+    :attacks_plant_part :Root, :Bulb ;
+    :causes_damage :gall_inst, :rot_inst ;
+    :description "Ditylenchus dipsaci"@fr .
+
+
+#################################################################
+#    INSTANCES - SYMPTÔMES
+#################################################################
+
+:chlorosis_inst rdf:type owl:NamedIndividual, :Chlorosis ;
+    rdfs:label "Chlorose"@fr ;
+    :lemma "chlorose" .
+
+:necrosis_inst rdf:type owl:NamedIndividual, :Necrosis ;
+    rdfs:label "Nécrose"@fr ;
+    :lemma "necrose" .
+
+:wilting_inst rdf:type owl:NamedIndividual, :Wilting ;
+    rdfs:label "Flétrissement"@fr ;
+    :lemma "fletrissement" .
+
+:lesion_inst rdf:type owl:NamedIndividual, :Lesion ;
+    rdfs:label "Lésion"@fr ;
+    :lemma "lesion" .
+
+:spot_inst rdf:type owl:NamedIndividual, :Spot ;
+    rdfs:label "Tache"@fr ;
+    :lemma "tache" .
+
+:streak_inst rdf:type owl:NamedIndividual, :Streak ;
+    rdfs:label "Striure"@fr ;
+    :lemma "striure" .
+
+:mosaic_inst rdf:type owl:NamedIndividual, :Mosaic ;
+    rdfs:label "Mosaïque"@fr ;
+    :lemma "mosaique" .
+
+:rot_inst rdf:type owl:NamedIndividual, :Rot ;
+    rdfs:label "Pourriture"@fr ;
+    :lemma "pourriture" .
+
+:gall_inst rdf:type owl:NamedIndividual, :Gall ;
+    rdfs:label "Galle"@fr ;
+    :lemma "galle" .
+
+:deformation_inst rdf:type owl:NamedIndividual, :Deformation ;
+    rdfs:label "Déformation"@fr ;
+    :lemma "deformation" .
+
+:stunting_inst rdf:type owl:NamedIndividual, :Stunting ;
+    rdfs:label "Nanisme"@fr ;
+    :lemma "nanisme" .
+
+:webbing_inst rdf:type owl:NamedIndividual, :Webbing ;
+    rdfs:label "Toile"@fr ;
+    :lemma "toile" .
+
+:gallery_inst rdf:type owl:NamedIndividual, :Gallery ;
+    rdfs:label "Galerie"@fr ;
+    :lemma "galerie" .
+
+:honeydew_inst rdf:type owl:NamedIndividual, :Honeydew ;
+    rdfs:label "Miellat"@fr ;
+    :lemma "miellat" .
+
+:biting_inst rdf:type owl:NamedIndividual, :Biting ;
+    rdfs:label "Morsure"@fr ;
+    :lemma "morsure" .
+
+
+#################################################################
+#    INSTANCES - CARACTÉRISTIQUES MORPHOLOGIQUES (UNIFIÉES)
+#################################################################
+
+### Couleurs (instances uniques)
+:vert_fonce_inst rdf:type owl:NamedIndividual, :DarkGreen ;
+    rdfs:label "Vert foncé"@fr ;
+    :lemma "vert_fonce" .
+
+:vert_clair_inst rdf:type owl:NamedIndividual, :LightGreen ;
+    rdfs:label "Vert clair"@fr ;
+    :lemma "vert_clair" .
+
+:jaune_inst rdf:type owl:NamedIndividual, :Yellow ;
+    rdfs:label "Jaune"@fr ;
+    :lemma "jaune" .
+
+:brun_inst rdf:type owl:NamedIndividual, :Brown ;
+    rdfs:label "Brun"@fr ;
+    :lemma "brun" .
+
+:vert_bleuatre_inst rdf:type owl:NamedIndividual, :BluishGreen ;
+    rdfs:label "Vert bleuâtre"@fr ;
+    :lemma "vert_bleuatre" .
+
+:vert_grisatre_inst rdf:type owl:NamedIndividual, :GrayishGreen ;
+    rdfs:label "Vert grisâtre"@fr ;
+    :lemma "vert_grisatre" .
+
+:vert_jaunatre_inst rdf:type owl:NamedIndividual, :YellowishGreen ;
+    rdfs:label "Vert jaunâtre"@fr ;
+    :lemma "vert_jaunatre" .
+
+### Formes (instances uniques)
+:lineaire_lanceolee_inst rdf:type owl:NamedIndividual, :LinearLanceolate ;
+    rdfs:label "Linéaire-lancéolée"@fr ;
+    :lemma "lineaire_lanceolee" .
+
+:composee_imparipennee_inst rdf:type owl:NamedIndividual, :OddPinnate ;
+    rdfs:label "Composée imparipennée"@fr ;
+    :lemma "composee_imparipennee" .
+
+:tubulaire_cylindrique_inst rdf:type owl:NamedIndividual, :TubularCylindrical ;
+    rdfs:label "Tubulaire cylindrique"@fr ;
+    :lemma "tubulaire_cylindrique" .
+
+:simple_inst rdf:type owl:NamedIndividual, :SimpleLeaf ;
+    rdfs:label "Simple"@fr ;
+    :lemma "simple" .
+
+:composee_inst rdf:type owl:NamedIndividual, :CompoundLeaf ;
+    rdfs:label "Composée"@fr ;
+    :lemma "composee" .
+
+:simple_tubulaire_inst rdf:type owl:NamedIndividual, :SimpleTubular ;
+    rdfs:label "Simple tubulaire"@fr ;
+    :lemma "simple_tubulaire" .
+
+### Textures (instances uniques)
+:lisse_inst rdf:type owl:NamedIndividual, :Smooth ;
+    rdfs:label "Lisse"@fr ;
+    :lemma "lisse" .
+
+:pubescente_inst rdf:type owl:NamedIndividual, :Pubescent ;
+    rdfs:label "Pubescente"@fr ;
+    :lemma "pubescente" .
+
+:glanduleuse_inst rdf:type owl:NamedIndividual, :Glandular ;
+    rdfs:label "Glanduleuse"@fr ;
+    :lemma "glanduleuse" .
+
+:lisse_cireuse_inst rdf:type owl:NamedIndividual, :SmoothWaxy ;
+    rdfs:label "Lisse et cireuse"@fr ;
+    :lemma "lisse_cireuse" .
+
+:creuse_inst rdf:type owl:NamedIndividual, :Hollow ;
+    rdfs:label "Creuse"@fr ;
+    :lemma "creuse" .
+
+:legerement_rugueuse_inst rdf:type owl:NamedIndividual, :SlightlyRough ;
+    rdfs:label "Légèrement rugueuse"@fr ;
+    :lemma "legerement_rugueuse" .
+
+### Nervation (instances uniques)
+:nervation_parallele_inst rdf:type owl:NamedIndividual, :ParallelVenation ;
+    rdfs:label "Nervation parallèle"@fr ;
+    :lemma "nervation_parallele" .
+
+:nervation_reticulee_inst rdf:type owl:NamedIndividual, :ReticulateVenation ;
+    rdfs:label "Nervation réticulée"@fr ;
+    :lemma "nervation_reticulee" .
+
+
+#################################################################
+#    INSTANCES - ÉTATS DES FEUILLES
+#################################################################
+
+### Hydratation
+:turgescente_inst rdf:type owl:NamedIndividual, :Turgescent ;
+    rdfs:label "Turgescente"@fr ;
+    :lemma "turgescente" .
+
+:fletrie_inst rdf:type owl:NamedIndividual, :WiltedLeaf ;
+    rdfs:label "Flétrie"@fr ;
+    :lemma "fletrie" ;
+    :indicates_disease :fusariose_corn, :fusariose_tomato, :bacterial_wilt_tomato ;
+    :indicates_deficiency :stress_abiotique_corn, :stress_abiotique_tomato, :stress_abiotique_onion .
+
+:seche_inst rdf:type owl:NamedIndividual, :DryLeaf ;
+    rdfs:label "Sèche"@fr ;
+    :lemma "seche" ;
+    :indicates_deficiency :stress_abiotique_corn, :stress_abiotique_tomato .
+
+:cassante_inst rdf:type owl:NamedIndividual, :CrispyLeaf ;
+    rdfs:label "Cassante"@fr ;
+    :lemma "cassante" .
+
+### Santé
+:saine_inst rdf:type owl:NamedIndividual, :HealthyLeaf ;
+    rdfs:label "Saine"@fr ;
+    :lemma "saine" .
+
+:malade_inst rdf:type owl:NamedIndividual, :DiseasedLeaf ;
+    rdfs:label "Malade"@fr ;
+    :lemma "malade" .
+
+:mourante_inst rdf:type owl:NamedIndividual, :DyingLeaf ;
+    rdfs:label "Mourante"@fr ;
+    :lemma "mourante" .
+
+:morte_inst rdf:type owl:NamedIndividual, :DeadLeaf ;
+    rdfs:label "Morte"@fr ;
+    :lemma "morte" .
+
+### Coloration
+:chlorotique_inst rdf:type owl:NamedIndividual, :ChloroticLeaf ;
+    rdfs:label "Chlorotique"@fr ;
+    :lemma "chlorotique" ;
+    :indicates_disease :striure_corn, :virose_corn, :virus_tylcv_tomato, :fusariose_tomato, :mildiou_onion ;
+    :indicates_deficiency :stress_abiotique_corn, :stress_abiotique_tomato, :stress_abiotique_onion ;
+    :indicates_pest :puceron_corn, :acarien_tomato .
+
+:necrotique_inst rdf:type owl:NamedIndividual, :NecroticLeaf ;
+    rdfs:label "Nécrotique"@fr ;
+    :lemma "necrotique" ;
+    :indicates_disease :helminthosporiose_corn, :alternariose_tomato, :alternariose_onion, :curvulariose_corn .
+
+:brulee_inst rdf:type owl:NamedIndividual, :BurnedLeaf ;
+    rdfs:label "Brûlée"@fr ;
+    :lemma "brulee" ;
+    :indicates_deficiency :stress_abiotique_corn, :stress_abiotique_tomato .
+
+:decoloree_inst rdf:type owl:NamedIndividual, :BleachedLeaf ;
+    rdfs:label "Décolorée"@fr ;
+    :lemma "decoloree" .
+
+:rougie_inst rdf:type owl:NamedIndividual, :ReddenedLeaf ;
+    rdfs:label "Rougie"@fr ;
+    :lemma "rougie" ;
+    :indicates_deficiency :stress_abiotique_corn .
+
+### Structure
+:enroulee_inst rdf:type owl:NamedIndividual, :CurledLeaf ;
+    rdfs:label "Enroulée"@fr ;
+    :lemma "enroulee" ;
+    :indicates_disease :virus_tylcv_tomato ;
+    :indicates_pest :puceron_tomato, :thrips_onion .
+
+:tordue_inst rdf:type owl:NamedIndividual, :TwistedLeaf ;
+    rdfs:label "Tordue"@fr ;
+    :lemma "tordue" ;
+    :indicates_disease :virose_corn ;
+    :indicates_pest :thrips_tomato .
+
+:froissee_inst rdf:type owl:NamedIndividual, :CrinkledLeaf ;
+    rdfs:label "Froissée"@fr ;
+    :lemma "froissee" ;
+    :indicates_disease :virose_corn, :virus_tylcv_tomato .
+
+:tombante_inst rdf:type owl:NamedIndividual, :DroopingLeaf ;
+    rdfs:label "Tombante"@fr ;
+    :lemma "tombante" ;
+    :indicates_disease :fusariose_tomato, :bacterial_wilt_tomato ;
+    :indicates_deficiency :stress_abiotique_corn, :stress_abiotique_tomato .
+
+:dressee_inst rdf:type owl:NamedIndividual, :ErectLeaf ;
+    rdfs:label "Dressée"@fr ;
+    :lemma "dressee" .
+
+:aplatie_inst rdf:type owl:NamedIndividual, :FlattenedLeaf ;
+    rdfs:label "Aplatie"@fr ;
+    :lemma "aplatie" .
+
+:ratatinee_inst rdf:type owl:NamedIndividual, :ShriveledLeaf ;
+    rdfs:label "Ratatinée"@fr ;
+    :lemma "ratatinee" ;
+    :indicates_pest :acarien_tomato ;
+    :indicates_deficiency :stress_abiotique_onion .
+
+:perforee_inst rdf:type owl:NamedIndividual, :PerforatedLeaf ;
+    rdfs:label "Perforée"@fr ;
+    :lemma "perforee" ;
+    :indicates_pest :chenille_legionnaire_corn, :noctuelle_tomato, :chenille_onion .
+
+:dechiree_inst rdf:type owl:NamedIndividual, :TornLeaf ;
+    rdfs:label "Déchirée"@fr ;
+    :lemma "dechiree" .
+
+### Surface
+:tachetee_inst rdf:type owl:NamedIndividual, :SpottedLeaf ;
+    rdfs:label "Tachetée"@fr ;
+    :lemma "tachetee" ;
+    :indicates_disease :helminthosporiose_corn, :rouille_corn, :alternariose_tomato, :mildiou_tomato, :alternariose_onion .
+
+:striee_inst rdf:type owl:NamedIndividual, :StreakedLeaf ;
+    rdfs:label "Striée"@fr ;
+    :lemma "striee" ;
+    :indicates_disease :striure_corn ;
+    :indicates_pest :thrips_onion .
+
+:marbree_inst rdf:type owl:NamedIndividual, :MottledLeaf ;
+    rdfs:label "Marbrée"@fr ;
+    :lemma "marbree" ;
+    :indicates_disease :virose_corn .
+
+:poudreuse_inst rdf:type owl:NamedIndividual, :DustyLeaf ;
+    rdfs:label "Poudreuse"@fr ;
+    :lemma "poudreuse" ;
+    :indicates_disease :rouille_corn .
+
+:collante_inst rdf:type owl:NamedIndividual, :StickyLeaf ;
+    rdfs:label "Collante"@fr ;
+    :lemma "collante" ;
+    :indicates_pest :puceron_corn, :puceron_tomato, :aleurode_tomato .
+
+:fumagine_inst rdf:type owl:NamedIndividual, :SootyLeaf ;
+    rdfs:label "Fumagine"@fr ;
+    :lemma "fumagine" ;
+    :indicates_pest :puceron_corn, :puceron_tomato, :aleurode_tomato .
+
+:entoilee_inst rdf:type owl:NamedIndividual, :WebbedLeaf ;
+    rdfs:label "Entoilée"@fr ;
+    :lemma "entoilee" ;
+    :indicates_pest :acarien_tomato .
+
+:minee_inst rdf:type owl:NamedIndividual, :MinedLeaf ;
+    rdfs:label "Minée"@fr ;
+    :lemma "minee" ;
+    :indicates_pest :mineuse_tomato .
+
+### Maturité
+:jeune_inst rdf:type owl:NamedIndividual, :YoungLeaf ;
+    rdfs:label "Jeune"@fr ;
+    :lemma "jeune" .
+
+:mature_inst rdf:type owl:NamedIndividual, :MatureLeaf ;
+    rdfs:label "Mature"@fr ;
+    :lemma "mature" .
+
+:senescente_inst rdf:type owl:NamedIndividual, :SenescentLeaf ;
+    rdfs:label "Sénescente"@fr ;
+    :lemma "senescente" .
+
+
+#################################################################
+#    ASSOCIATIONS PLANTE <-> CARACTÉRISTIQUES TYPIQUES
+#################################################################
+
+:Corn :has_morphological_feature :lineaire_lanceolee_inst,
+                                 :nervation_parallele_inst,
+                                 :lisse_inst,
+                                 :simple_inst,
+                                 :vert_fonce_inst .
+
+:Tomato :has_morphological_feature :composee_imparipennee_inst,
+                                   :nervation_reticulee_inst,
+                                   :pubescente_inst,
+                                   :composee_inst,
+                                   :legerement_rugueuse_inst,
+                                   :vert_fonce_inst .
+
+:Onion :has_morphological_feature :tubulaire_cylindrique_inst,
+                                  :nervation_parallele_inst,
+                                  :lisse_cireuse_inst,
+                                  :creuse_inst,
+                                  :simple_tubulaire_inst,
+                                  :vert_bleuatre_inst .
+
+
+#################################################################
+#    INSTANCES - ÉTATS DE SANTÉ
+#################################################################
+
+:sain_inst rdf:type owl:NamedIndividual, :Healthy ;
+    rdfs:label "Sain"@fr ;
+    :lemma "sain" .
+
+:saine_inst rdf:type owl:NamedIndividual, :HealthyFeminine ;
+    rdfs:label "Saine"@fr ;
+    :lemma "saine" .
+
+:malade_status_inst rdf:type owl:NamedIndividual, :Diseased ;
+    rdfs:label "Malade"@fr ;
+    :lemma "malade" .
+
+:stresse_inst rdf:type owl:NamedIndividual, :Stressed ;
+    rdfs:label "Stressé"@fr ;
+    :lemma "stresse" .
+
+:infeste_inst rdf:type owl:NamedIndividual, :Infested ;
+    rdfs:label "Infesté"@fr ;
+    :lemma "infeste" .
+
+:vigoureux_inst rdf:type owl:NamedIndividual, :Vigorous ;
+    rdfs:label "Vigoureux"@fr ;
+    :lemma "vigoureux" .
+
+
+#################################################################
+#    CARACTÉRISTIQUES TYPIQUES PLANTE SAINE
+#################################################################
+
+### Indicateurs visuels d'une plante saine (associations symptôme-état)
+
+:saine_inst :indicates_disease owl:Nothing ;
+    rdfs:comment "Une feuille saine n'indique aucune maladie"@fr .
+
+:turgescente_inst :indicates_disease owl:Nothing ;
+    rdfs:comment "État normal d'hydratation"@fr .
+
+:dressee_inst :indicates_disease owl:Nothing ;
+    rdfs:comment "Position normale des feuilles"@fr .
+
+:vert_fonce_inst :indicates_disease owl:Nothing ;
+    rdfs:comment "Couleur normale indiquant bonne nutrition"@fr .
+
+:vert_clair_inst :indicates_disease owl:Nothing ;
+    rdfs:comment "Couleur normale pour jeunes feuilles"@fr .
+
+:vert_bleuatre_inst :indicates_disease owl:Nothing ;
+    rdfs:comment "Couleur normale pour oignon"@fr .

@@ -1,0 +1,2033 @@
+@prefix :  <http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dv: <http://www.semanticweb.org/datavault/> .
+@base <http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie/> . 
+
+<http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie> rdf:type owl:Ontology ;
+    rdfs:label "Ontologie des Plantes Agricoles du Burkina Faso - Version Data Vault"@fr ;
+    rdfs:comment "Ontologie enrichie pour extraction Data Vault (Hubs, Links, Satellites) - Systeme d'aide au diagnostic agricole"@fr ;
+    dct:creator "SOS - LAMI, Universite Joseph KI-ZERBO" ;
+    dct:created "2025"^^xsd:gYear ;
+    owl:versionInfo "3.0 - Data Vault Ready" .
+
+#################################################################
+#    NAMESPACE DATA VAULT - ANNOTATIONS POUR EXTRACTION
+#################################################################
+
+dv:Hub rdf:type owl:AnnotationProperty ;
+    rdfs:label "Hub Data Vault"@fr ;
+    rdfs:comment "Indique une entite metier principale avec cle naturelle"@fr .
+
+dv:Link rdf:type owl:AnnotationProperty ;
+    rdfs:label "Link Data Vault"@fr ;
+    rdfs:comment "Indique une relation entre plusieurs Hubs"@fr .
+
+dv:Satellite rdf:type owl:AnnotationProperty ;
+    rdfs:label "Satellite Data Vault"@fr ;
+    rdfs:comment "Indique des attributs descriptifs rattaches a un Hub ou Link"@fr .
+
+dv:businessKey rdf:type owl:AnnotationProperty ;
+    rdfs:label "Cle metier"@fr ;
+    rdfs:comment "Propriete servant de cle metier naturelle pour le Hub"@fr .
+
+dv:parentHub rdf:type owl:AnnotationProperty ;
+    rdfs:label "Hub parent"@fr ;
+    rdfs:comment "Reference au Hub auquel ce Satellite est rattache"@fr .
+
+dv:linkedHubs rdf:type owl:AnnotationProperty ;
+    rdfs:label "Hubs lies"@fr ;
+    rdfs:comment "Liste des Hubs connectes par ce Link"@fr .
+
+dv:loadDate rdf:type owl:AnnotationProperty ;
+    rdfs:label "Date de chargement"@fr ;
+    rdfs:comment "Timestamp du chargement dans le Data Vault"@fr .
+
+dv:recordSource rdf:type owl:AnnotationProperty ;
+    rdfs:label "Source d'enregistrement"@fr ;
+    rdfs:comment "Origine des donnees"@fr .
+
+dv:hashDiff rdf:type owl:AnnotationProperty ;
+    rdfs:label "Hash de difference"@fr ;
+    rdfs:comment "Hash pour detecter les changements dans les Satellites"@fr .
+
+#################################################################
+#    CLASSES HUBS - ENTITES METIER PRINCIPALES
+#################################################################
+
+# ================= HUB: PLANTE =================
+:plante rdf:type owl:Class ;
+    rdfs:label "Plante"@fr ;
+    rdfs:comment "Hub principal - Culture agricole avec cle metier nom_scientifique"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":nom_scientifique" ;
+    skos:definition "Entite centrale representant une espece vegetale cultivee"@fr .
+
+:mais rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Mais"@fr ;
+    rdfs:comment "Zea mays - Culture cerealiere majeure au Burkina Faso"@fr ;
+    skos:altLabel "Kamaana"@moore , "Corn"@en ;
+    owl:disjointWith :oignon , :tomate .
+
+:oignon rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Oignon"@fr ;
+    rdfs:comment "Allium cepa - Culture maraichere"@fr ;
+    skos:altLabel "Gyabga"@moore , "Onion"@en ;
+    owl:disjointWith :tomate . 
+
+:tomate rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Tomate"@fr ;
+    rdfs:comment "Solanum lycopersicum - Culture maraichere"@fr ;
+    skos:altLabel "Tomaate"@moore , "Tomato"@en .
+
+:mil rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Mil"@fr ;
+    rdfs:comment "Pennisetum glaucum - Cereale traditionnelle resistante a la secheresse"@fr ;
+    skos:altLabel "Kazanga"@moore , "Pearl millet"@en .
+
+:sorgho rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Sorgho"@fr ;
+    rdfs:comment "Sorghum bicolor - Cereale adaptee aux zones semi-arides"@fr ;
+    skos:altLabel "Ki"@moore , "Sorghum"@en .
+
+:niebe rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Niebe"@fr ;
+    rdfs:comment "Vigna unguiculata - Legumineuse riche en proteines"@fr ;
+    skos:altLabel "Benga"@moore , "Cowpea"@en .
+
+:arachide rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Arachide"@fr ;
+    rdfs:comment "Arachis hypogaea - Oleagineuse importante"@fr ;
+    skos:altLabel "Groundnut"@en .
+
+:coton rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Coton"@fr ;
+    rdfs:comment "Gossypium hirsutum - Culture de rente majeure"@fr ;
+    skos:altLabel "Cotton"@en .
+
+# ================= HUB: MALADIE =================
+:maladie rdf:type owl:Class ;
+    rdfs:label "Maladie"@fr ;
+    rdfs:comment "Hub - Probleme phytosanitaire avec cle metier code_maladie"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":code_maladie" ;
+    skos:definition "Affection ou stress affectant la sante des plantes"@fr .
+
+:maladie_fongique rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Maladie fongique"@fr ;
+    rdfs:comment "Maladie causee par des champignons pathogenes"@fr .
+
+:maladie_bacterienne rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Maladie bacterienne"@fr ;
+    rdfs:comment "Maladie causee par des bacteries phytopathogenes"@fr . 
+
+:maladie_virale rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Maladie virale"@fr ;
+    rdfs:comment "Maladie causee par des virus vegetaux"@fr .
+
+:ravageur rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Ravageur"@fr ;
+    rdfs:comment "Insectes, acariens et autres organismes nuisibles aux cultures"@fr .
+
+:stress_abiotique rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Stress abiotique"@fr ;
+    rdfs:comment "Stress cause par des facteurs non-vivants"@fr .
+
+:carence_nutritionnelle rdf:type owl:Class ;
+    rdfs:subClassOf :stress_abiotique ;
+    rdfs:label "Carence nutritionnelle"@fr ;
+    rdfs:comment "Deficience en elements nutritifs essentiels"@fr .
+
+:stress_hydrique rdf:type owl:Class ;
+    rdfs:subClassOf :stress_abiotique ;
+    rdfs:label "Stress hydrique"@fr ;
+    rdfs:comment "Manque ou exces d'eau affectant la plante"@fr .
+
+:stress_thermique rdf:type owl:Class ;
+    rdfs:subClassOf :stress_abiotique ;
+    rdfs:label "Stress thermique"@fr ;
+    rdfs:comment "Temperature excessive ou insuffisante"@fr .
+
+# ================= HUB: REGION =================
+:region rdf:type owl:Class ;
+    rdfs:label "Region"@fr ;
+    rdfs:comment "Hub - Zone geographique du Burkina Faso avec cle metier code_region"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":code_region" ;
+    skos:definition "Division administrative ou zone agro-ecologique"@fr .
+
+:zone_agro_ecologique rdf:type owl:Class ;
+    rdfs:subClassOf :region ;
+    rdfs:label "Zone agro-ecologique"@fr ;
+    rdfs:comment "Classification selon le climat et l'agriculture"@fr .
+
+:province rdf:type owl:Class ;
+    rdfs:subClassOf :region ;
+    rdfs:label "Province"@fr ;
+    rdfs:comment "Division administrative du Burkina Faso"@fr .
+
+:commune rdf:type owl:Class ;
+    rdfs:subClassOf :region ;
+    rdfs:label "Commune"@fr ;
+    rdfs:comment "Subdivision de la province"@fr .
+
+:village rdf:type owl:Class ;
+    rdfs:subClassOf :region ;
+    rdfs:label "Village"@fr ;
+    rdfs:comment "Plus petite unite geographique"@fr .
+
+# ================= HUB: IMAGE =================
+:image rdf:type owl:Class ;
+    rdfs:label "Image"@fr ;
+    rdfs:comment "Hub - Capture photographique avec cle metier id_image"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":id_image" ;
+    skos:definition "Photographie d'une plante pour analyse"@fr .
+
+# ================= HUB: AGRICULTEUR =================
+:agriculteur rdf:type owl:Class ;
+    rdfs:label "Agriculteur"@fr ;
+    rdfs:comment "Hub - Producteur agricole avec cle metier id_agriculteur"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":id_agriculteur" ;
+    skos:definition "Personne pratiquant l'agriculture"@fr .
+
+# ================= HUB: TRAITEMENT =================
+:traitement rdf:type owl:Class ;
+    rdfs:label "Traitement"@fr ;
+    rdfs:comment "Hub - Intervention phytosanitaire avec cle metier code_traitement"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":code_traitement" ;
+    skos:definition "Methode de lutte contre les maladies ou ravageurs"@fr .
+
+:traitement_chimique rdf:type owl:Class ;
+    rdfs:subClassOf :traitement ;
+    rdfs:label "Traitement chimique"@fr ;
+    rdfs:comment "Utilisation de produits phytosanitaires de synthese"@fr .
+
+:traitement_biologique rdf:type owl:Class ;
+    rdfs:subClassOf :traitement ;
+    rdfs:label "Traitement biologique"@fr ;
+    rdfs:comment "Utilisation d'agents biologiques ou biopesticides"@fr .
+
+:traitement_cultural rdf:type owl:Class ;
+    rdfs:subClassOf :traitement ;
+    rdfs:label "Pratique culturale"@fr ;
+    rdfs:comment "Methodes agronomiques de prevention ou lutte"@fr .
+
+:traitement_traditionnel rdf:type owl:Class ;
+    rdfs:subClassOf :traitement ;
+    rdfs:label "Traitement traditionnel"@fr ;
+    rdfs:comment "Methodes traditionnelles locales"@fr .
+
+# ================= HUB: SAISON =================
+:saison rdf:type owl:Class ;
+    rdfs:label "Saison"@fr ;
+    rdfs:comment "Hub - Periode de l'annee avec cle metier code_saison"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":code_saison" ;
+    skos:definition "Periode climatique ou agricole"@fr .
+
+# ================= HUB: STADE_CROISSANCE =================
+:stade_croissance rdf:type owl:Class ;
+    rdfs:label "Stade de croissance"@fr ;
+    rdfs:comment "Hub - Phase phenologique avec cle metier code_stade"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":code_stade" ;
+    skos:definition "Etape du developpement de la plante"@fr .
+
+# ================= HUB: SYMPTOME =================
+:symptome rdf:type owl:Class ;
+    rdfs:label "Symptome"@fr ;
+    rdfs:comment "Hub - Manifestation visible avec cle metier code_symptome"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":code_symptome" ;
+    skos:definition "Signe observable d'une maladie ou stress"@fr .
+
+# ================= HUB: ORGANE_PLANTE =================
+:organe_plante rdf:type owl:Class ;
+    rdfs:label "Organe de plante"@fr ;
+    rdfs:comment "Hub - Partie anatomique avec cle metier code_organe"@fr ;
+    dv:Hub "true"^^xsd:boolean ;
+    dv:businessKey ":code_organe" ;
+    skos:definition "Structure anatomique vegetale"@fr .
+
+#################################################################
+#    CLASSES LINKS - RELATIONS ENTRE HUBS
+#################################################################
+
+# ================= LINK: DIAGNOSTIC =================
+:link_diagnostic rdf:type owl:Class ;
+    rdfs:label "Link Diagnostic"@fr ;
+    rdfs:comment "Link reliant Image, Plante, Maladie et Symptome"@fr ;
+    dv:Link "true"^^xsd:boolean ;
+    dv:linkedHubs ":image, :plante, :maladie, :symptome" ;
+    skos:definition "Association entre une observation et un diagnostic"@fr .
+
+# ================= LINK: OBSERVATION =================
+:link_observation rdf:type owl:Class ;
+    rdfs:label "Link Observation"@fr ;
+    rdfs:comment "Link reliant Image, Plante, Region et Agriculteur"@fr ;
+    dv:Link "true"^^xsd:boolean ;
+    dv:linkedHubs ":image, :plante, :region, :agriculteur" ;
+    skos:definition "Enregistrement d'une observation terrain"@fr .
+
+# ================= LINK: CULTURE =================
+:link_culture rdf:type owl:Class ;
+    rdfs:label "Link Culture"@fr ;
+    rdfs:comment "Link reliant Plante, Region, Saison et Agriculteur"@fr ;
+    dv:Link "true"^^xsd:boolean ;
+    dv:linkedHubs ":plante, :region, :saison, :agriculteur" ;
+    skos:definition "Association d'une culture dans un contexte"@fr .
+
+# ================= LINK: APPLICATION_TRAITEMENT =================
+:link_application_traitement rdf:type owl:Class ;
+    rdfs:label "Link Application Traitement"@fr ;
+    rdfs:comment "Link reliant Traitement, Maladie, Plante et Agriculteur"@fr ;
+    dv:Link "true"^^xsd:boolean ;
+    dv:linkedHubs ":traitement, :maladie, :plante, :agriculteur" ;
+    skos:definition "Application d'un traitement sur une culture"@fr .
+
+# ================= LINK: MANIFESTATION_SYMPTOME =================
+:link_manifestation_symptome rdf:type owl:Class ;
+    rdfs:label "Link Manifestation Symptome"@fr ;
+    rdfs:comment "Link reliant Symptome, Organe, Stade_croissance"@fr ;
+    dv:Link "true"^^xsd:boolean ;
+    dv:linkedHubs ":symptome, :organe_plante, :stade_croissance" ;
+    skos:definition "Localisation et timing d'un symptome"@fr .
+
+# ================= LINK: SUSCEPTIBILITE =================
+:link_susceptibilite rdf:type owl:Class ;
+    rdfs:label "Link Susceptibilite"@fr ;
+    rdfs:comment "Link reliant Plante, Maladie et Stade_croissance"@fr ;
+    dv:Link "true"^^xsd:boolean ;
+    dv:linkedHubs ":plante, :maladie, :stade_croissance" ;
+    skos:definition "Vulnerabilite d'une plante a une maladie selon le stade"@fr .
+
+# ================= LINK: PREVALENCE_REGIONALE =================
+:link_prevalence_regionale rdf:type owl:Class ;
+    rdfs:label "Link Prevalence Regionale"@fr ;
+    rdfs:comment "Link reliant Maladie, Region et Saison"@fr ;
+    dv:Link "true"^^xsd:boolean ;
+    dv:linkedHubs ":maladie, :region, :saison" ;
+    skos:definition "Distribution geographique et temporelle des maladies"@fr .
+
+#################################################################
+#    CLASSES SATELLITES - ATTRIBUTS DESCRIPTIFS
+#################################################################
+
+# ================= SATELLITE: PLANTE =================
+:sat_plante_morphologie rdf:type owl:Class ;
+    rdfs:label "Satellite Morphologie Plante"@fr ;
+    rdfs:comment "Attributs morphologiques de la plante"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":plante" ;
+    skos:definition "Caracteristiques physiques de la plante"@fr .
+
+:sat_plante_taxonomie rdf:type owl:Class ;
+    rdfs:label "Satellite Taxonomie Plante"@fr ;
+    rdfs:comment "Classification scientifique de la plante"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":plante" ;
+    skos:definition "Position taxonomique dans la classification"@fr .
+
+:sat_plante_agronomie rdf:type owl:Class ;
+    rdfs:label "Satellite Agronomie Plante"@fr ;
+    rdfs:comment "Informations agronomiques et culturales"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":plante" ;
+    skos:definition "Besoins et pratiques culturales"@fr .
+
+:sat_plante_nomenclature rdf:type owl:Class ;
+    rdfs:label "Satellite Nomenclature Plante"@fr ;
+    rdfs:comment "Noms dans differentes langues"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":plante" ;
+    skos:definition "Appellations locales et internationales"@fr .
+
+# ================= SATELLITE: MALADIE =================
+:sat_maladie_description rdf:type owl:Class ;
+    rdfs:label "Satellite Description Maladie"@fr ;
+    rdfs:comment "Description detaillee de la maladie"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":maladie" ;
+    skos:definition "Caracteristiques et etiologie"@fr .
+
+:sat_maladie_epidemiologie rdf:type owl:Class ;
+    rdfs:label "Satellite Epidemiologie Maladie"@fr ;
+    rdfs:comment "Donnees epidemiologiques"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":maladie" ;
+    skos:definition "Propagation et facteurs favorisants"@fr .
+
+:sat_maladie_impact rdf:type owl:Class ;
+    rdfs:label "Satellite Impact Maladie"@fr ;
+    rdfs:comment "Impact economique et agronomique"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":maladie" ;
+    skos:definition "Pertes de rendement et gravite"@fr .
+
+# ================= SATELLITE: IMAGE =================
+:sat_image_metadata rdf:type owl:Class ;
+    rdfs:label "Satellite Metadata Image"@fr ;
+    rdfs:comment "Metadonnees techniques de l'image"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":image" ;
+    skos:definition "Informations techniques de capture"@fr .
+
+:sat_image_annotation rdf:type owl:Class ;
+    rdfs:label "Satellite Annotation Image"@fr ;
+    rdfs:comment "Annotations et labels de l'image"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":image" ;
+    skos:definition "Etiquettes pour l'entrainement ML"@fr .
+
+:sat_image_qualite rdf:type owl:Class ;
+    rdfs:label "Satellite Qualite Image"@fr ;
+    rdfs:comment "Indicateurs de qualite de l'image"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":image" ;
+    skos:definition "Scores de qualite et validite"@fr .
+
+# ================= SATELLITE: REGION =================
+:sat_region_geographie rdf:type owl:Class ;
+    rdfs:label "Satellite Geographie Region"@fr ;
+    rdfs:comment "Donnees geographiques de la region"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":region" ;
+    skos:definition "Coordonnees et limites"@fr .
+
+:sat_region_climat rdf:type owl:Class ;
+    rdfs:label "Satellite Climat Region"@fr ;
+    rdfs:comment "Donnees climatiques de la region"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":region" ;
+    skos:definition "Pluviometrie, temperature, etc."@fr .
+
+:sat_region_sol rdf:type owl:Class ;
+    rdfs:label "Satellite Sol Region"@fr ;
+    rdfs:comment "Caracteristiques pedologiques"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":region" ;
+    skos:definition "Type et qualite des sols"@fr .
+
+# ================= SATELLITE: TRAITEMENT =================
+:sat_traitement_composition rdf:type owl:Class ;
+    rdfs:label "Satellite Composition Traitement"@fr ;
+    rdfs:comment "Composition et principes actifs"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":traitement" ;
+    skos:definition "Formulation du produit"@fr .
+
+:sat_traitement_application rdf:type owl:Class ;
+    rdfs:label "Satellite Application Traitement"@fr ;
+    rdfs:comment "Modalites d'application"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":traitement" ;
+    skos:definition "Dosage, frequence, methode"@fr .
+
+:sat_traitement_efficacite rdf:type owl:Class ;
+    rdfs:label "Satellite Efficacite Traitement"@fr ;
+    rdfs:comment "Donnees d'efficacite"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":traitement" ;
+    skos:definition "Taux de reussite et conditions"@fr .
+
+# ================= SATELLITE: AGRICULTEUR =================
+:sat_agriculteur_profil rdf:type owl:Class ;
+    rdfs:label "Satellite Profil Agriculteur"@fr ;
+    rdfs:comment "Informations sur l'agriculteur"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":agriculteur" ;
+    skos:definition "Donnees demographiques et contact"@fr .
+
+:sat_agriculteur_exploitation rdf:type owl:Class ;
+    rdfs:label "Satellite Exploitation Agriculteur"@fr ;
+    rdfs:comment "Informations sur l'exploitation"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":agriculteur" ;
+    skos:definition "Taille, cultures, equipements"@fr .
+
+# ================= SATELLITE: LINK DIAGNOSTIC =================
+:sat_diagnostic_confiance rdf:type owl:Class ;
+    rdfs:label "Satellite Confiance Diagnostic"@fr ;
+    rdfs:comment "Niveau de confiance du diagnostic"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":link_diagnostic" ;
+    skos:definition "Score de confiance et methode"@fr .
+
+:sat_diagnostic_validation rdf:type owl:Class ;
+    rdfs:label "Satellite Validation Diagnostic"@fr ;
+    rdfs:comment "Statut de validation du diagnostic"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":link_diagnostic" ;
+    skos:definition "Verification par expert"@fr .
+
+#################################################################
+#    CLASSES MORPHOLOGIQUES (SATELLITES ATTRIBUTS)
+#################################################################
+
+:type_plante rdf:type owl:Class ;
+    rdfs:label "Type de plante"@fr ;
+    rdfs:comment "Classification botanique fondamentale"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_taxonomie" .
+
+:monocotyledone rdf:type owl:Class ;
+    rdfs:subClassOf :type_plante ;
+    rdfs:label "Monocotyledone"@fr ;
+    rdfs:comment "Plante a une seule feuille embryonnaire"@fr ;
+    skos:example "Mais, Mil, Sorgho, Oignon"@fr .
+
+:dicotyledone rdf:type owl:Class ;
+    rdfs:subClassOf :type_plante ;
+    rdfs:label "Dicotyledone"@fr ;
+    rdfs:comment "Plante a deux feuilles embryonnaires"@fr ;
+    skos:example "Tomate, Niebe, Arachide"@fr .
+
+:famille_botanique rdf:type owl:Class ;
+    rdfs:label "Famille botanique"@fr ;
+    rdfs:comment "Classification taxonomique familiale"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_taxonomie" .
+
+:poaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Poacees (Graminees)"@fr ;
+    rdfs:comment "Famille des graminees"@fr ;
+    skos:example "Mais, Mil, Sorgho, Riz"@fr .
+
+:solanaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Solanacees"@fr ;
+    rdfs:comment "Famille des solanacees"@fr ;
+    skos:example "Tomate, Piment, Aubergine"@fr .
+
+:amaryllidaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Amaryllidacees"@fr ;
+    rdfs:comment "Famille des amaryllidacees"@fr ;
+    skos:example "Oignon, Ail, Poireau"@fr .
+
+:fabaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Fabacees (Legumineuses)"@fr ;
+    rdfs:comment "Famille des legumineuses"@fr ;
+    skos:example "Niebe, Arachide, Soja"@fr .
+
+:malvaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Malvacees"@fr ;
+    rdfs:comment "Famille des malvacees"@fr ;
+    skos:example "Coton, Gombo"@fr .
+
+# Formes de feuilles
+:forme_feuille rdf:type owl:Class ;
+    rdfs:label "Forme de feuille"@fr ;
+    rdfs:comment "Morphologie foliaire"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:lineaire_lanceolee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Lineaire-lanceolee"@fr ;
+    rdfs:comment "Feuille longue etroite et pointue"@fr .
+
+:composee_pennee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Composee-pennee"@fr ;
+    rdfs:comment "Feuille divisee en folioles"@fr .
+
+:tubulaire rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Tubulaire"@fr ;
+    rdfs:comment "Feuille creuse et cylindrique"@fr .
+
+:simple rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Simple"@fr ;
+    rdfs:comment "Feuille non divisee"@fr .
+
+:lobee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Lobee"@fr ;
+    rdfs:comment "Feuille avec des lobes"@fr .
+
+:dentee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Dentee"@fr ;
+    rdfs:comment "Feuille avec des bords en dents"@fr .
+
+:trifoliee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Trifoliee"@fr ;
+    rdfs:comment "Feuille composee de trois folioles"@fr .
+
+# Couleurs de feuilles
+:couleur_feuille rdf:type owl:Class ;
+    rdfs:label "Couleur de feuille"@fr ;
+    rdfs:comment "Coloration foliaire observable"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:vert_fonce rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Vert fonce"@fr ;
+    rdfs:comment "Indicateur de plante saine"@fr .
+
+:vert_clair rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Vert clair"@fr ;
+    rdfs:comment "Peut indiquer un debut de stress"@fr .
+
+:vert_moyen rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Vert moyen"@fr ;
+    rdfs:comment "Couleur verte intermediaire"@fr .
+
+:jaunatre rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Jaunatre"@fr ;
+    rdfs:comment "Chlorose ou stress nutritionnel"@fr .
+
+:beige_brun rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Beige-Brun"@fr ;
+    rdfs:comment "Necrose ou mort des tissus"@fr .
+
+:taches_brunes rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Taches brunes"@fr ;
+    rdfs:comment "Presence de lesions fongiques"@fr .
+
+:couleur_rouille rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Couleur rouille"@fr ;
+    rdfs:comment "Caracteristique de la rouille"@fr .
+
+:pourpre_violet rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Pourpre-Violet"@fr ;
+    rdfs:comment "Carence en phosphore ou stress froid"@fr .
+
+# Textures de feuilles
+:texture_feuille rdf:type owl:Class ;
+    rdfs:label "Texture de feuille"@fr ;
+    rdfs:comment "Caracteristiques de surface foliaire"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:lisse rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Lisse"@fr .
+
+:pubescente rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Pubescente"@fr ;
+    rdfs:comment "Couverte de petits poils"@fr .
+
+:cireuse rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Cireuse"@fr ;
+    rdfs:comment "Couche cireuse protectrice"@fr .
+
+:rugueuse rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Rugueuse"@fr .
+
+:glanduleuse rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Glanduleuse"@fr ;
+    rdfs:comment "Presence de glandes secretrices"@fr .
+
+# Nervation
+:nervation rdf:type owl:Class ;
+    rdfs:label "Nervation"@fr ;
+    rdfs:comment "Disposition des nervures"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:nervation_parallele rdf:type owl:Class ;
+    rdfs:subClassOf :nervation ;
+    rdfs:label "Nervation parallele"@fr ;
+    rdfs:comment "Typique des monocotyledones"@fr .
+
+:nervation_reticulee rdf:type owl:Class ;
+    rdfs:subClassOf :nervation ;
+    rdfs:label "Nervation reticulee"@fr ;
+    rdfs:comment "Typique des dicotyledones"@fr .
+
+:nervation_palmee rdf:type owl:Class ;
+    rdfs:subClassOf :nervation ;
+    rdfs:label "Nervation palmee"@fr ;
+    rdfs:comment "Nervures rayonnant d'un point"@fr .
+
+# Dimensions feuilles
+:dimension_feuille rdf:type owl:Class ;
+    rdfs:label "Dimension de feuille"@fr ;
+    rdfs:comment "Taille relative de la feuille"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:feuille_grande rdf:type owl:Class ;
+    rdfs:subClassOf :dimension_feuille ;
+    rdfs:label "Grande (>30cm)"@fr .
+
+:feuille_moyenne rdf:type owl:Class ;
+    rdfs:subClassOf :dimension_feuille ;
+    rdfs:label "Moyenne (10-30cm)"@fr .
+
+:feuille_petite rdf:type owl:Class ;
+    rdfs:subClassOf :dimension_feuille ;
+    rdfs:label "Petite (<10cm)"@fr .
+
+# Types de tiges
+:type_tige rdf:type owl:Class ;
+    rdfs:label "Type de tige"@fr ;
+    rdfs:comment "Classification de la tige"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:chaume rdf:type owl:Class ;
+    rdfs:subClassOf :type_tige ;
+    rdfs:label "Chaume"@fr ;
+    rdfs:comment "Tige creuse des graminees"@fr .
+
+:tige_herbacee rdf:type owl:Class ;
+    rdfs:subClassOf :type_tige ;
+    rdfs:label "Tige herbacee"@fr ;
+    rdfs:comment "Tige verte non ligneuse"@fr .
+
+:tige_volubile rdf:type owl:Class ;
+    rdfs:subClassOf :type_tige ;
+    rdfs:label "Tige volubile"@fr ;
+    rdfs:comment "Tige grimpante"@fr .
+
+:tige_rampante rdf:type owl:Class ;
+    rdfs:subClassOf :type_tige ;
+    rdfs:label "Tige rampante"@fr ;
+    rdfs:comment "Tige au ras du sol"@fr .
+
+# Types de racines
+:type_racine rdf:type owl:Class ;
+    rdfs:label "Type de racine"@fr ;
+    rdfs:comment "Systeme racinaire"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:racine_fasciculee rdf:type owl:Class ;
+    rdfs:subClassOf :type_racine ;
+    rdfs:label "Racine fasciculee"@fr ;
+    rdfs:comment "Racines en faisceau des monocotyledones"@fr .
+
+:racine_pivotante rdf:type owl:Class ;
+    rdfs:subClassOf :type_racine ;
+    rdfs:label "Racine pivotante"@fr ;
+    rdfs:comment "Racine principale des dicotyledones"@fr .
+
+:bulbe rdf:type owl:Class ;
+    rdfs:subClassOf :type_racine ;
+    rdfs:label "Bulbe"@fr ;
+    rdfs:comment "Organe de reserve souterrain"@fr .
+
+# Cycles de croissance
+:cycle_croissance rdf:type owl:Class ;
+    rdfs:label "Cycle de croissance"@fr ;
+    rdfs:comment "Duree du cycle de vie"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_agronomie" .
+
+:annuel rdf:type owl:Class ;
+    rdfs:subClassOf :cycle_croissance ;
+    rdfs:label "Annuel"@fr ;
+    rdfs:comment "Cycle complet en une annee"@fr .
+
+:bisannuel rdf:type owl:Class ;
+    rdfs:subClassOf :cycle_croissance ;
+    rdfs:label "Bisannuel"@fr ;
+    rdfs:comment "Cycle sur deux annees"@fr .
+
+:perenne rdf:type owl:Class ;
+    rdfs:subClassOf :cycle_croissance ;
+    rdfs:label "Perenne"@fr ;
+    rdfs:comment "Plante vivace"@fr .
+
+# Ports de plante
+:port rdf:type owl:Class ;
+    rdfs:label "Port"@fr ;
+    rdfs:comment "Silhouette generale de la plante"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:dresse rdf:type owl:Class ;
+    rdfs:subClassOf :port ;
+    rdfs:label "Dresse"@fr .
+
+:rampant rdf:type owl:Class ;
+    rdfs:subClassOf :port ;
+    rdfs:label "Rampant"@fr .
+
+:grimpant rdf:type owl:Class ;
+    rdfs:subClassOf :port ;
+    rdfs:label "Grimpant"@fr .
+
+:buissonnant rdf:type owl:Class ;
+    rdfs:subClassOf :port ;
+    rdfs:label "Buissonnant"@fr .
+
+:prostree rdf:type owl:Class ;
+    rdfs:subClassOf :port ;
+    rdfs:label "Prostree"@fr ;
+    rdfs:comment "Etalee sur le sol"@fr .
+
+# Etats sanitaires
+:etat_sanitaire rdf:type owl:Class ;
+    rdfs:label "Etat sanitaire"@fr ;
+    rdfs:comment "Etat de sante de la plante"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:parentHub ":sat_plante_morphologie" .
+
+:sain rdf:type owl:Class ;
+    rdfs:subClassOf :etat_sanitaire ;
+    rdfs:label "Sain"@fr .
+
+:malade rdf:type owl:Class ;
+    rdfs:subClassOf :etat_sanitaire ;
+    rdfs:label "Malade"@fr .
+
+:stresse rdf:type owl:Class ;
+    rdfs:subClassOf :etat_sanitaire ;
+    rdfs:label "Stresse"@fr .
+
+:mort rdf:type owl:Class ;
+    rdfs:subClassOf :etat_sanitaire ;
+    rdfs:label "Mort"@fr .
+
+#################################################################
+#    INSTANCES SYMPTOMES (HUB)
+#################################################################
+
+:chlorose rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Chlorose"@fr ;
+    :code_symptome "SYM001" ;
+    rdfs:comment "Jaunissement des tissus par manque de chlorophylle"@fr .
+
+:necrose rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Necrose"@fr ;
+    :code_symptome "SYM002" ;
+    rdfs:comment "Mort et brunissement des tissus"@fr .
+
+:fletrissement rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Fletrissement"@fr ;
+    :code_symptome "SYM003" ;
+    rdfs:comment "Perte de turgescence et affaissement"@fr .
+
+:taches_foliaires rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Taches foliaires"@fr ;
+    :code_symptome "SYM004" ;
+    rdfs:comment "Lesions localisees sur les feuilles"@fr .
+
+:perforation rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Perforation"@fr ;
+    :code_symptome "SYM005" ;
+    rdfs:comment "Trous causes par les insectes"@fr .
+
+:striures rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Striures"@fr ;
+    :code_symptome "SYM006" ;
+    rdfs:comment "Lignes decolorees sur les feuilles"@fr .
+
+:deformation rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Deformation"@fr ;
+    :code_symptome "SYM007" ;
+    rdfs:comment "Malformation des organes"@fr .
+
+:galle rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Galle"@fr ;
+    :code_symptome "SYM008" ;
+    rdfs:comment "Excroissance anormale"@fr .
+
+:mosaique rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Mosaique"@fr ;
+    :code_symptome "SYM009" ;
+    rdfs:comment "Motif irregulier de couleurs"@fr .
+
+:enroulement rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Enroulement"@fr ;
+    :code_symptome "SYM010" ;
+    rdfs:comment "Courbure anormale des feuilles"@fr .
+
+:pourriture rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Pourriture"@fr ;
+    :code_symptome "SYM011" ;
+    rdfs:comment "Decomposition des tissus"@fr .
+
+:exsudat rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Exsudat"@fr ;
+    :code_symptome "SYM012" ;
+    rdfs:comment "Ecoulement de seve ou mucus"@fr .
+
+:dessechement rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Dessechement"@fr ;
+    :code_symptome "SYM013" ;
+    rdfs:comment "Perte d'eau et mort des tissus"@fr .
+
+:nanisme rdf:type owl:NamedIndividual , :symptome ;
+    rdfs:label "Nanisme"@fr ;
+    :code_symptome "SYM014" ;
+    rdfs:comment "Croissance reduite anormale"@fr .
+
+#################################################################
+#    INSTANCES ORGANES (HUB)
+#################################################################
+
+:feuille rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Feuille"@fr ;
+    :code_organe "ORG001" .
+
+:tige rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Tige"@fr ;
+    :code_organe "ORG002" .
+
+:racine_organe rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Racine"@fr ;
+    :code_organe "ORG003" .
+
+:fruit rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Fruit"@fr ;
+    :code_organe "ORG004" .
+
+:fleur rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Fleur"@fr ;
+    :code_organe "ORG005" .
+
+:graine rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Graine"@fr ;
+    :code_organe "ORG006" .
+
+:epi rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Epi"@fr ;
+    :code_organe "ORG007" .
+
+:bulbe_organe rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Bulbe"@fr ;
+    :code_organe "ORG008" .
+
+:collet rdf:type owl:NamedIndividual , :organe_plante ;
+    rdfs:label "Collet"@fr ;
+    :code_organe "ORG009" .
+
+#################################################################
+#    INSTANCES STADES DE CROISSANCE (HUB)
+#################################################################
+
+:germination rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Germination"@fr ;
+    :code_stade "STD001" ;
+    rdfs:comment "Emergence de la plantule"@fr .
+
+:levee rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Levee"@fr ;
+    :code_stade "STD002" ;
+    rdfs:comment "Sortie de terre de la plantule"@fr .
+
+:stade_vegetatif rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Stade vegetatif"@fr ;
+    :code_stade "STD003" ;
+    rdfs:comment "Croissance des feuilles et tiges"@fr .
+
+:tallage rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Tallage"@fr ;
+    :code_stade "STD004" ;
+    rdfs:comment "Formation des talles (graminees)"@fr .
+
+:montaison rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Montaison"@fr ;
+    :code_stade "STD005" ;
+    rdfs:comment "Elongation de la tige"@fr .
+
+:floraison rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Floraison"@fr ;
+    :code_stade "STD006" ;
+    rdfs:comment "Apparition des fleurs"@fr .
+
+:fructification rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Fructification"@fr ;
+    :code_stade "STD007" ;
+    rdfs:comment "Formation des fruits"@fr .
+
+:maturation rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Maturation"@fr ;
+    :code_stade "STD008" ;
+    rdfs:comment "Murissement des fruits/graines"@fr .
+
+:senescence rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Senescence"@fr ;
+    :code_stade "STD009" ;
+    rdfs:comment "Vieillissement et fin de cycle"@fr .
+
+:bulbification rdf:type owl:NamedIndividual , :stade_croissance ;
+    rdfs:label "Bulbification"@fr ;
+    :code_stade "STD010" ;
+    rdfs:comment "Formation du bulbe (oignon)"@fr .
+
+#################################################################
+#    INSTANCES SAISONS (HUB)
+#################################################################
+
+:saison_seche_froide rdf:type owl:NamedIndividual , :saison ;
+    rdfs:label "Saison seche froide"@fr ;
+    :code_saison "SAI001" ;
+    rdfs:comment "Novembre a Fevrier - Harmattan"@fr ;
+    :temperature_moyenne "20-25 C" ;
+    :pluviometrie "0 mm" .
+
+:saison_seche_chaude rdf:type owl:NamedIndividual , :saison ;
+    rdfs:label "Saison seche chaude"@fr ;
+    :code_saison "SAI002" ;
+    rdfs:comment "Mars a Mai - Periode la plus chaude"@fr ;
+    :temperature_moyenne "35-42 C" ;
+    :pluviometrie "0-50 mm" .
+
+:saison_humide rdf:type owl:NamedIndividual , :saison ;
+    rdfs:label "Saison humide (Hivernage)"@fr ;
+    :code_saison "SAI003" ;
+    rdfs:comment "Juin a Octobre - Saison des pluies"@fr ;
+    :temperature_moyenne "25-32 C" ;
+    :pluviometrie "300-1200 mm" .
+
+:contre_saison rdf:type owl:NamedIndividual , :saison ;
+    rdfs:label "Contre-saison"@fr ;
+    :code_saison "SAI004" ;
+    rdfs:comment "Culture irriguee hors saison des pluies"@fr .
+
+#################################################################
+#    INSTANCES REGIONS DU BURKINA FASO (HUB)
+#################################################################
+
+:zone_sahelienne rdf:type owl:NamedIndividual , :zone_agro_ecologique ;
+    rdfs:label "Zone sahelienne"@fr ;
+    :code_region "ZAE001" ;
+    rdfs:comment "Nord du Burkina - Pluviometrie < 600mm"@fr ;
+    :pluviometrie_annuelle "300-600 mm" ;
+    :cultures_principales "Mil, Niebe, Sorgho" .
+
+:zone_soudano_sahelienne rdf:type owl:NamedIndividual , :zone_agro_ecologique ;
+    rdfs:label "Zone soudano-sahelienne"@fr ;
+    :code_region "ZAE002" ;
+    rdfs:comment "Centre du Burkina - Zone de transition"@fr ;
+    :pluviometrie_annuelle "600-900 mm" ;
+    :cultures_principales "Mil, Sorgho, Mais, Arachide" .
+
+:zone_soudanienne rdf:type owl:NamedIndividual , :zone_agro_ecologique ;
+    rdfs:label "Zone soudanienne"@fr ;
+    :code_region "ZAE003" ;
+    rdfs:comment "Sud et Ouest du Burkina - Plus arrosee"@fr ;
+    :pluviometrie_annuelle "900-1200 mm" ;
+    :cultures_principales "Mais, Coton, Riz, Igname" .
+
+# Regions administratives
+:region_centre rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Centre"@fr ;
+    :code_region "REG001" ;
+    :chef_lieu "Ouagadougou" ;
+    :zone_agro :zone_soudano_sahelienne .
+
+:region_hauts_bassins rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region des Hauts-Bassins"@fr ;
+    :code_region "REG002" ;
+    :chef_lieu "Bobo-Dioulasso" ;
+    :zone_agro :zone_soudanienne .
+
+:region_boucle_mouhoun rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region de la Boucle du Mouhoun"@fr ;
+    :code_region "REG003" ;
+    :chef_lieu "Dedougou" ;
+    :zone_agro :zone_soudanienne .
+
+:region_cascades rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region des Cascades"@fr ;
+    :code_region "REG004" ;
+    :chef_lieu "Banfora" ;
+    :zone_agro :zone_soudanienne .
+
+:region_centre_est rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Centre-Est"@fr ;
+    :code_region "REG005" ;
+    :chef_lieu "Tenkodogo" ;
+    :zone_agro :zone_soudano_sahelienne .
+
+:region_centre_nord rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Centre-Nord"@fr ;
+    :code_region "REG006" ;
+    :chef_lieu "Kaya" ;
+    :zone_agro :zone_soudano_sahelienne .
+
+:region_centre_ouest rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Centre-Ouest"@fr ;
+    :code_region "REG007" ;
+    :chef_lieu "Koudougou" ;
+    :zone_agro :zone_soudano_sahelienne .
+
+:region_centre_sud rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Centre-Sud"@fr ;
+    :code_region "REG008" ;
+    :chef_lieu "Manga" ;
+    :zone_agro :zone_soudano_sahelienne .
+
+:region_est rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region de l'Est"@fr ;
+    :code_region "REG009" ;
+    :chef_lieu "Fada N'Gourma" ;
+    :zone_agro :zone_soudanienne .
+
+:region_nord rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Nord"@fr ;
+    :code_region "REG010" ;
+    :chef_lieu "Ouahigouya" ;
+    :zone_agro :zone_sahelienne .
+
+:region_plateau_central rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Plateau Central"@fr ;
+    :code_region "REG011" ;
+    :chef_lieu "Ziniaré" ;
+    :zone_agro :zone_soudano_sahelienne .
+
+:region_sahel rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Sahel"@fr ;
+    :code_region "REG012" ;
+    :chef_lieu "Dori" ;
+    :zone_agro :zone_sahelienne .
+
+:region_sud_ouest rdf:type owl:NamedIndividual , :region ;
+    rdfs:label "Region du Sud-Ouest"@fr ;
+    :code_region "REG013" ;
+    :chef_lieu "Gaoua" ;
+    :zone_agro :zone_soudanienne .
+
+#################################################################
+#    INSTANCES MALADIES (HUB)
+#################################################################
+
+:helminthosporiose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Helminthosporiose (Brulure foliaire du Nord)"@fr ;
+    :code_maladie "MAL001" ;
+    :agent_pathogene "Exserohilum turcicum" ;
+    rdfs:comment "Lesions allongees beiges-brunes sur les feuilles"@fr ;
+    :cause_symptome :necrose , :taches_foliaires ;
+    :affecte_culture :mais ;
+    :severite "Moyenne a elevee" ;
+    :conditions_favorables "Humidite elevee, temperatures 20-25C" .
+
+:chenille_legionnaire_instance rdf:type owl:NamedIndividual , :ravageur ;
+    rdfs:label "Chenille legionnaire d'automne"@fr ;
+    :code_maladie "RAV001" ;
+    :agent_pathogene "Spodoptera frugiperda" ;
+    rdfs:comment "Ravageur majeur des cereales au Burkina Faso"@fr ;
+    :cause_symptome :perforation , :deformation ;
+    :affecte_culture :mais , :sorgho , :mil ;
+    :severite "Tres elevee" ;
+    :conditions_favorables "Toute la saison de culture" .
+
+:rouille_mais_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Rouille du mais"@fr ;
+    :code_maladie "MAL002" ;
+    :agent_pathogene "Puccinia sorghi" ;
+    rdfs:comment "Pustules orangees sur les feuilles"@fr ;
+    :cause_symptome :taches_foliaires ;
+    :affecte_culture :mais ;
+    :severite "Faible a moyenne" .
+
+:striure_mais_instance rdf:type owl:NamedIndividual , :maladie_virale ;
+    rdfs:label "Striure du mais (MSV)"@fr ;
+    :code_maladie "MAL003" ;
+    :agent_pathogene "Maize streak virus" ;
+    :vecteur "Cicadella mbila" ;
+    rdfs:comment "Striures chlorotiques le long des nervures"@fr ;
+    :cause_symptome :striures , :chlorose , :nanisme ;
+    :affecte_culture :mais ;
+    :severite "Elevee" .
+
+:curvulariose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Curvulariose du mais"@fr ;
+    :code_maladie "MAL004" ;
+    :agent_pathogene "Curvularia spp." ;
+    rdfs:comment "Taches foliaires brunes"@fr ;
+    :cause_symptome :taches_foliaires ;
+    :affecte_culture :mais ;
+    :severite "Faible" .
+
+:acarien_instance rdf:type owl:NamedIndividual , :ravageur ;
+    rdfs:label "Acarien tetranyque"@fr ;
+    :code_maladie "RAV002" ;
+    :agent_pathogene "Tetranychus urticae" ;
+    rdfs:comment "Decolorations et jaunissement des feuilles"@fr ;
+    :cause_symptome :chlorose , :dessechement ;
+    :affecte_culture :tomate , :oignon ;
+    :severite "Moyenne" ;
+    :conditions_favorables "Temps sec et chaud" .
+
+:alternariose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Alternariose de la tomate"@fr ;
+    :code_maladie "MAL005" ;
+    :agent_pathogene "Alternaria solani" ;
+    rdfs:comment "Taches concentriques brunes"@fr ;
+    :cause_symptome :necrose , :taches_foliaires ;
+    :affecte_culture :tomate ;
+    :severite "Elevee" .
+
+:fletrissement_bacterien_instance rdf:type owl:NamedIndividual , :maladie_bacterienne ;
+    rdfs:label "Fletrissement bacterien"@fr ;
+    :code_maladie "MAL006" ;
+    :agent_pathogene "Ralstonia solanacearum" ;
+    rdfs:comment "Fletrissement rapide et irreversible"@fr ;
+    :cause_symptome :fletrissement , :exsudat ;
+    :affecte_culture :tomate ;
+    :severite "Tres elevee" .
+
+:fusariose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Fusariose"@fr ;
+    :code_maladie "MAL007" ;
+    :agent_pathogene "Fusarium oxysporum" ;
+    rdfs:comment "Jaunissement unilateral et fletrissement"@fr ;
+    :cause_symptome :fletrissement , :chlorose ;
+    :affecte_culture :tomate ;
+    :severite "Elevee" .
+
+:mildiou_oignon_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Mildiou de l'oignon"@fr ;
+    :code_maladie "MAL008" ;
+    :agent_pathogene "Peronospora destructor" ;
+    rdfs:comment "Duvet grisatre sur les feuilles"@fr ;
+    :cause_symptome :taches_foliaires , :dessechement ;
+    :affecte_culture :oignon ;
+    :severite "Elevee" ;
+    :conditions_favorables "Humidite elevee, 10-22C" .
+
+:thrips_oignon_instance rdf:type owl:NamedIndividual , :ravageur ;
+    rdfs:label "Thrips de l'oignon"@fr ;
+    :code_maladie "RAV003" ;
+    :agent_pathogene "Thrips tabaci" ;
+    rdfs:comment "Decoloration argentee des feuilles"@fr ;
+    :cause_symptome :chlorose , :deformation ;
+    :affecte_culture :oignon ;
+    :severite "Elevee" .
+
+:pourriture_rose_oignon_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Pourriture rose de l'oignon"@fr ;
+    :code_maladie "MAL009" ;
+    :agent_pathogene "Pyrenochaeta terrestris" ;
+    rdfs:comment "Coloration rose des racines et du bulbe"@fr ;
+    :cause_symptome :pourriture , :fletrissement ;
+    :affecte_culture :oignon ;
+    :severite "Moyenne" .
+
+:foreur_tige_mais_instance rdf:type owl:NamedIndividual , :ravageur ;
+    rdfs:label "Foreur de tige du mais"@fr ;
+    :code_maladie "RAV004" ;
+    :agent_pathogene "Busseola fusca, Sesamia calamistis" ;
+    rdfs:comment "Galeries dans les tiges causant verse et perte de rendement"@fr ;
+    :cause_symptome :perforation , :fletrissement ;
+    :affecte_culture :mais , :sorgho ;
+    :severite "Elevee" .
+
+:charbon_mais_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Charbon commun du mais"@fr ;
+    :code_maladie "MAL010" ;
+    :agent_pathogene "Ustilago maydis" ;
+    rdfs:comment "Galles remplies de spores noires sur epis et tiges"@fr ;
+    :cause_symptome :galle ;
+    :affecte_culture :mais ;
+    :severite "Moyenne" .
+
+:mildiou_mil_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Mildiou du mil"@fr ;
+    :code_maladie "MAL011" ;
+    :agent_pathogene "Sclerospora graminicola" ;
+    rdfs:comment "Maladie majeure du mil en Afrique"@fr ;
+    :cause_symptome :chlorose , :nanisme , :deformation ;
+    :affecte_culture :mil ;
+    :severite "Tres elevee" .
+
+:anthracnose_sorgho_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Anthracnose du sorgho"@fr ;
+    :code_maladie "MAL012" ;
+    :agent_pathogene "Colletotrichum graminicola" ;
+    rdfs:comment "Lesions rouges sur feuilles et tiges"@fr ;
+    :cause_symptome :necrose , :taches_foliaires ;
+    :affecte_culture :sorgho ;
+    :severite "Elevee" .
+
+:carence_azote_instance rdf:type owl:NamedIndividual , :carence_nutritionnelle ;
+    rdfs:label "Carence en azote"@fr ;
+    :code_maladie "CAR001" ;
+    rdfs:comment "Jaunissement general debutant par les vieilles feuilles"@fr ;
+    :cause_symptome :chlorose , :nanisme ;
+    :affecte_culture :mais , :tomate , :oignon , :mil , :sorgho ;
+    :severite "Variable" .
+
+:carence_phosphore_instance rdf:type owl:NamedIndividual , :carence_nutritionnelle ;
+    rdfs:label "Carence en phosphore"@fr ;
+    :code_maladie "CAR002" ;
+    rdfs:comment "Coloration pourpre des feuilles et retard de croissance"@fr ;
+    :cause_symptome :nanisme ;
+    :affecte_culture :mais , :tomate ;
+    :severite "Variable" .
+
+:carence_potassium_instance rdf:type owl:NamedIndividual , :carence_nutritionnelle ;
+    rdfs:label "Carence en potassium"@fr ;
+    :code_maladie "CAR003" ;
+    rdfs:comment "Necrose marginale des feuilles agees"@fr ;
+    :cause_symptome :necrose , :fletrissement ;
+    :affecte_culture :mais , :tomate ;
+    :severite "Variable" .
+
+:stress_hydrique_secheresse_instance rdf:type owl:NamedIndividual , :stress_hydrique ;
+    rdfs:label "Stress hydrique - Secheresse"@fr ;
+    :code_maladie "STR001" ;
+    rdfs:comment "Manque d'eau causant fletrissement et jaunissement"@fr ;
+    :cause_symptome :fletrissement , :enroulement , :dessechement ;
+    :affecte_culture :mais , :tomate , :oignon ;
+    :severite "Variable selon duree" .
+
+#################################################################
+#    INSTANCES TRAITEMENTS (HUB)
+#################################################################
+
+:mancozebe_traitement rdf:type owl:NamedIndividual , :traitement_chimique ;
+    rdfs:label "Mancozebe"@fr ;
+    :code_traitement "TRT001" ;
+    :principe_actif "Mancozebe" ;
+    :type_action "Fongicide contact" ;
+    :cible_maladie :helminthosporiose_instance , :alternariose_instance , :mildiou_oignon_instance ;
+    rdfs:comment "Fongicide preventif a large spectre"@fr .
+
+:lambda_cyhalothrine_traitement rdf:type owl:NamedIndividual , :traitement_chimique ;
+    rdfs:label "Lambda-cyhalothrine"@fr ;
+    :code_traitement "TRT002" ;
+    :principe_actif "Lambda-cyhalothrine" ;
+    :type_action "Insecticide contact et ingestion" ;
+    :cible_maladie :chenille_legionnaire_instance , :thrips_oignon_instance ;
+    rdfs:comment "Pyrethrinoide de synthese"@fr .
+
+:bacillus_thuringiensis_traitement rdf:type owl:NamedIndividual , :traitement_biologique ;
+    rdfs:label "Bacillus thuringiensis (Bt)"@fr ;
+    :code_traitement "TRT003" ;
+    :principe_actif "Bacillus thuringiensis" ;
+    :type_action "Biopesticide" ;
+    :cible_maladie :chenille_legionnaire_instance , :foreur_tige_mais_instance ;
+    rdfs:comment "Bacterie entomopathogene"@fr .
+
+:huile_neem_traitement rdf:type owl:NamedIndividual , :traitement_biologique ;
+    rdfs:label "Huile de neem"@fr ;
+    :code_traitement "TRT004" ;
+    :principe_actif "Azadirachtine" ;
+    :type_action "Insecticide et fongicide naturel" ;
+    :cible_maladie :acarien_instance , :thrips_oignon_instance ;
+    rdfs:comment "Extrait de Azadirachta indica"@fr .
+
+:rotation_culturale_traitement rdf:type owl:NamedIndividual , :traitement_cultural ;
+    rdfs:label "Rotation des cultures"@fr ;
+    :code_traitement "TRT005" ;
+    :type_action "Prevention" ;
+    :cible_maladie :fusariose_instance , :fletrissement_bacterien_instance ;
+    rdfs:comment "Alterner les familles botaniques sur 3-4 ans"@fr .
+
+:variete_resistante_traitement rdf:type owl:NamedIndividual , :traitement_cultural ;
+    rdfs:label "Utilisation de varietes resistantes"@fr ;
+    :code_traitement "TRT006" ;
+    :type_action "Prevention genetique" ;
+    :cible_maladie :striure_mais_instance , :mildiou_mil_instance ;
+    rdfs:comment "Selection de varietes tolerantes ou resistantes"@fr .
+
+:cendre_bois_traitement rdf:type owl:NamedIndividual , :traitement_traditionnel ;
+    rdfs:label "Cendre de bois"@fr ;
+    :code_traitement "TRT007" ;
+    :type_action "Repulsif et fongicide" ;
+    :cible_maladie :acarien_instance , :thrips_oignon_instance ;
+    rdfs:comment "Pratique traditionnelle au Burkina Faso"@fr .
+
+:extrait_piment_traitement rdf:type owl:NamedIndividual , :traitement_traditionnel ;
+    rdfs:label "Extrait de piment"@fr ;
+    :code_traitement "TRT008" ;
+    :type_action "Repulsif insectes" ;
+    :cible_maladie :chenille_legionnaire_instance ;
+    rdfs:comment "Maceration de piment fort dans l'eau"@fr .
+
+:fertilisation_azotee_traitement rdf:type owl:NamedIndividual , :traitement_cultural ;
+    rdfs:label "Fertilisation azotee"@fr ;
+    :code_traitement "TRT009" ;
+    :type_action "Correction nutritionnelle" ;
+    :cible_maladie :carence_azote_instance ;
+    rdfs:comment "Apport d'uree ou de sulfate d'ammonium"@fr .
+
+:irrigation_goutte_traitement rdf:type owl:NamedIndividual , :traitement_cultural ;
+    rdfs:label "Irrigation goutte-a-goutte"@fr ;
+    :code_traitement "TRT010" ;
+    :type_action "Gestion hydrique" ;
+    :cible_maladie :stress_hydrique_secheresse_instance ;
+    rdfs:comment "Economie d'eau et prevention du stress hydrique"@fr .
+
+#################################################################
+#    OBJECT PROPERTIES - RELATIONS ENTRE CLASSES
+#################################################################
+
+# === Proprietes pour LINKS ===
+:a_diagnostic rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour diagnostic"@fr ;
+    rdfs:domain :image ;
+    rdfs:range :link_diagnostic ;
+    dv:Link "true"^^xsd:boolean .
+
+:concerne_plante rdf:type owl:ObjectProperty ;
+    rdfs:label "concerne plante"@fr ;
+    rdfs:domain :link_diagnostic ;
+    rdfs:range :plante .
+
+:identifie_maladie rdf:type owl:ObjectProperty ;
+    rdfs:label "identifie maladie"@fr ;
+    rdfs:domain :link_diagnostic ;
+    rdfs:range :maladie .
+
+:observe_symptome rdf:type owl:ObjectProperty ;
+    rdfs:label "observe symptome"@fr ;
+    rdfs:domain :link_diagnostic ;
+    rdfs:range :symptome .
+
+# === Proprietes pour relations Maladie-Plante ===
+:affecte_culture rdf:type owl:ObjectProperty ;
+    rdfs:label "affecte la culture"@fr ;
+    rdfs:domain :maladie ;
+    rdfs:range :plante ;
+    dv:Link "true"^^xsd:boolean ;
+    rdfs:comment "Link entre Hub Maladie et Hub Plante"@fr .
+
+:est_affecte_par rdf:type owl:ObjectProperty ;
+    rdfs:label "est affecte par"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :maladie ;
+    owl:inverseOf :affecte_culture .
+
+# === Proprietes pour relations Symptome-Maladie ===
+:cause_symptome rdf:type owl:ObjectProperty ;
+    rdfs:label "cause le symptome"@fr ;
+    rdfs:domain :maladie ;
+    rdfs:range :symptome ;
+    dv:Link "true"^^xsd:boolean ;
+    rdfs:comment "Link entre Hub Maladie et Hub Symptome"@fr .
+
+:est_cause_par rdf:type owl:ObjectProperty ;
+    rdfs:label "est cause par"@fr ;
+    rdfs:domain :symptome ;
+    rdfs:range :maladie ;
+    owl:inverseOf :cause_symptome .
+
+# === Proprietes pour relations Traitement-Maladie ===
+:traite_maladie rdf:type owl:ObjectProperty ;
+    rdfs:label "traite la maladie"@fr ;
+    rdfs:domain :traitement ;
+    rdfs:range :maladie ;
+    dv:Link "true"^^xsd:boolean ;
+    rdfs:comment "Link entre Hub Traitement et Hub Maladie"@fr .
+
+:cible_maladie rdf:type owl:ObjectProperty ;
+    rdfs:label "cible la maladie"@fr ;
+    rdfs:domain :traitement ;
+    rdfs:range :maladie ;
+    owl:equivalentProperty :traite_maladie .
+
+# === Proprietes pour relations Region ===
+:se_trouve_dans rdf:type owl:ObjectProperty ;
+    rdfs:label "se trouve dans"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :region ;
+    dv:Link "true"^^xsd:boolean .
+
+:prevalente_dans rdf:type owl:ObjectProperty ;
+    rdfs:label "prevalente dans"@fr ;
+    rdfs:domain :maladie ;
+    rdfs:range :region ;
+    dv:Link "true"^^xsd:boolean .
+
+:zone_agro rdf:type owl:ObjectProperty ;
+    rdfs:label "zone agro-ecologique"@fr ;
+    rdfs:domain :region ;
+    rdfs:range :zone_agro_ecologique .
+
+# === Proprietes pour relations Saison ===
+:cultive_en_saison rdf:type owl:ObjectProperty ;
+    rdfs:label "cultive en saison"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :saison ;
+    dv:Link "true"^^xsd:boolean .
+
+:favorable_en_saison rdf:type owl:ObjectProperty ;
+    rdfs:label "favorable en saison"@fr ;
+    rdfs:domain :maladie ;
+    rdfs:range :saison ;
+    dv:Link "true"^^xsd:boolean .
+
+# === Proprietes pour relations Stade de croissance ===
+:sensible_au_stade rdf:type owl:ObjectProperty ;
+    rdfs:label "sensible au stade"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :stade_croissance ;
+    dv:Link "true"^^xsd:boolean ;
+    rdfs:comment "Stade ou la plante est vulnerable a une maladie"@fr .
+
+:apparait_au_stade rdf:type owl:ObjectProperty ;
+    rdfs:label "apparait au stade"@fr ;
+    rdfs:domain :symptome ;
+    rdfs:range :stade_croissance ;
+    dv:Link "true"^^xsd:boolean .
+
+# === Proprietes pour relations Organe ===
+:affecte_organe rdf:type owl:ObjectProperty ;
+    rdfs:label "affecte l'organe"@fr ;
+    rdfs:domain :symptome ;
+    rdfs:range :organe_plante ;
+    dv:Link "true"^^xsd:boolean .
+
+:se_manifeste_sur rdf:type owl:ObjectProperty ;
+    rdfs:label "se manifeste sur"@fr ;
+    rdfs:domain :maladie ;
+    rdfs:range :organe_plante ;
+    dv:Link "true"^^xsd:boolean .
+
+# === Proprietes morphologiques (pour Satellites) ===
+:a_type_plante rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour type"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :type_plante ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:appartient_famille rdf:type owl:ObjectProperty ;
+    rdfs:label "appartient a la famille"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :famille_botanique ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_forme_feuille rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour forme de feuille"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :forme_feuille ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_couleur_feuille rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour couleur de feuille"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :couleur_feuille ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_texture_feuille rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour texture de feuille"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :texture_feuille ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_nervation rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour nervation"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :nervation ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_dimension_feuille rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour dimension de feuille"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :dimension_feuille ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_type_tige rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour type de tige"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :type_tige ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_type_racine rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour type de racine"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :type_racine ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_cycle_croissance rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour cycle de croissance"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :cycle_croissance ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_port rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour port"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :port ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:a_etat_sanitaire rdf:type owl:ObjectProperty ;
+    rdfs:label "a pour etat sanitaire"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :etat_sanitaire ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Proprietes pour maladies specifiques par plante ===
+:a_maladie_mais rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :est_affecte_par ;
+    rdfs:label "a pour maladie (mais)"@fr ;
+    rdfs:domain :mais ;
+    rdfs:range :maladie .
+
+:a_maladie_tomate rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :est_affecte_par ;
+    rdfs:label "a pour maladie (tomate)"@fr ;
+    rdfs:domain :tomate ;
+    rdfs:range :maladie .
+
+:a_maladie_oignon rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :est_affecte_par ;
+    rdfs:label "a pour maladie (oignon)"@fr ;
+    rdfs:domain :oignon ;
+    rdfs:range :maladie .
+
+# === Proprietes pour symptomes et couleurs ===
+:presente_symptome rdf:type owl:ObjectProperty ;
+    rdfs:label "presente le symptome"@fr ;
+    rdfs:domain :plante ;
+    rdfs:range :symptome ;
+    dv:Link "true"^^xsd:boolean .
+
+:modifie_couleur rdf:type owl:ObjectProperty ;
+    rdfs:label "modifie la couleur"@fr ;
+    rdfs:domain :symptome ;
+    rdfs:range :couleur_feuille ;
+    dv:Satellite "true"^^xsd:boolean .
+
+#################################################################
+#    DATATYPE PROPERTIES - ATTRIBUTS POUR SATELLITES
+#################################################################
+
+# === Cles metier (Business Keys pour Hubs) ===
+:id_image rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :image ;
+    rdfs:range xsd:string ;
+    rdfs:label "identifiant image"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:id_agriculteur rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :agriculteur ;
+    rdfs:range xsd:string ;
+    rdfs:label "identifiant agriculteur"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:code_maladie rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :maladie ;
+    rdfs:range xsd:string ;
+    rdfs:label "code maladie"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:code_traitement rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :traitement ;
+    rdfs:range xsd:string ;
+    rdfs:label "code traitement"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:code_region rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :region ;
+    rdfs:range xsd:string ;
+    rdfs:label "code region"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:code_saison rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :saison ;
+    rdfs:range xsd:string ;
+    rdfs:label "code saison"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:code_stade rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :stade_croissance ;
+    rdfs:range xsd:string ;
+    rdfs:label "code stade"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:code_symptome rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :symptome ;
+    rdfs:range xsd:string ;
+    rdfs:label "code symptome"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:code_organe rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :organe_plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "code organe"@fr ;
+    dv:businessKey "true"^^xsd:boolean .
+
+# === Attributs de nomenclature (Satellite) ===
+:nom_scientifique rdf:type owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "nom scientifique"@fr ;
+    dv:Satellite "true"^^xsd:boolean ;
+    dv:businessKey "true"^^xsd:boolean .
+
+:nom_local rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "nom local (Moore)"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:nom_commun rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "nom commun"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs morphologiques (Satellite) ===
+:hauteur_plante rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "hauteur de la plante"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:longueur_feuille rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "longueur de feuille"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:largeur_feuille rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "largeur de feuille"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs de maladie (Satellite) ===
+:agent_pathogene rdf:type owl:DatatypeProperty ;
+    rdfs:domain :maladie ;
+    rdfs:range xsd:string ;
+    rdfs:label "agent pathogene"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:vecteur rdf:type owl:DatatypeProperty ;
+    rdfs:domain :maladie ;
+    rdfs:range xsd:string ;
+    rdfs:label "vecteur de transmission"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:severite rdf:type owl:DatatypeProperty ;
+    rdfs:domain :maladie ;
+    rdfs:range xsd:string ;
+    rdfs:label "severite"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:conditions_favorables rdf:type owl:DatatypeProperty ;
+    rdfs:domain :maladie ;
+    rdfs:range xsd:string ;
+    rdfs:label "conditions favorables"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs de traitement (Satellite) ===
+:principe_actif rdf:type owl:DatatypeProperty ;
+    rdfs:domain :traitement ;
+    rdfs:range xsd:string ;
+    rdfs:label "principe actif"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:type_action rdf:type owl:DatatypeProperty ;
+    rdfs:domain :traitement ;
+    rdfs:range xsd:string ;
+    rdfs:label "type d'action"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:dosage rdf:type owl:DatatypeProperty ;
+    rdfs:domain :traitement ;
+    rdfs:range xsd:string ;
+    rdfs:label "dosage recommande"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs de region (Satellite) ===
+:chef_lieu rdf:type owl:DatatypeProperty ;
+    rdfs:domain :region ;
+    rdfs:range xsd:string ;
+    rdfs:label "chef-lieu"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:pluviometrie_annuelle rdf:type owl:DatatypeProperty ;
+    rdfs:domain :region ;
+    rdfs:range xsd:string ;
+    rdfs:label "pluviometrie annuelle"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:cultures_principales rdf:type owl:DatatypeProperty ;
+    rdfs:domain :region ;
+    rdfs:range xsd:string ;
+    rdfs:label "cultures principales"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs de saison (Satellite) ===
+:temperature_moyenne rdf:type owl:DatatypeProperty ;
+    rdfs:domain :saison ;
+    rdfs:range xsd:string ;
+    rdfs:label "temperature moyenne"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:pluviometrie rdf:type owl:DatatypeProperty ;
+    rdfs:domain :saison ;
+    rdfs:range xsd:string ;
+    rdfs:label "pluviometrie"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs d'image (Satellite) ===
+:chemin_image rdf:type owl:DatatypeProperty ;
+    rdfs:domain :image ;
+    rdfs:range xsd:string ;
+    rdfs:label "chemin de l'image"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:date_capture rdf:type owl:DatatypeProperty ;
+    rdfs:domain :image ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "date de capture"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:resolution rdf:type owl:DatatypeProperty ;
+    rdfs:domain :image ;
+    rdfs:range xsd:string ;
+    rdfs:label "resolution"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:format_image rdf:type owl:DatatypeProperty ;
+    rdfs:domain :image ;
+    rdfs:range xsd:string ;
+    rdfs:label "format image"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:score_qualite rdf:type owl:DatatypeProperty ;
+    rdfs:domain :image ;
+    rdfs:range xsd:float ;
+    rdfs:label "score de qualite"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs de diagnostic (Satellite Link) ===
+:score_confiance rdf:type owl:DatatypeProperty ;
+    rdfs:domain :link_diagnostic ;
+    rdfs:range xsd:float ;
+    rdfs:label "score de confiance"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:methode_diagnostic rdf:type owl:DatatypeProperty ;
+    rdfs:domain :link_diagnostic ;
+    rdfs:range xsd:string ;
+    rdfs:label "methode de diagnostic"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:valide_par rdf:type owl:DatatypeProperty ;
+    rdfs:domain :link_diagnostic ;
+    rdfs:range xsd:string ;
+    rdfs:label "valide par"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:date_validation rdf:type owl:DatatypeProperty ;
+    rdfs:domain :link_diagnostic ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "date de validation"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs geographiques ===
+:localisation rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "localisation"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:latitude rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "latitude"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+:longitude rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "longitude"@fr ;
+    dv:Satellite "true"^^xsd:boolean .
+
+# === Attributs temporels Data Vault ===
+:load_date rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "date de chargement"@fr ;
+    dv:loadDate "true"^^xsd:boolean .
+
+:record_source rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "source d'enregistrement"@fr ;
+    dv:recordSource "true"^^xsd:boolean .
+
+:hash_diff rdf:type owl:DatatypeProperty ;
+    rdfs:range xsd:string ;
+    rdfs:label "hash de difference"@fr ;
+    dv:hashDiff "true"^^xsd:boolean .
+
+#################################################################
+#    INSTANCES D'IMAGES (HUB avec SATELLITES)
+#################################################################
+
+:image1_mais_helminthosporiose rdf:type owl:NamedIndividual , :mais ;
+    rdfs:label "Image 1 - Mais avec helminthosporiose"@fr ;
+    :id_image "IMG_MAIS_001" ;
+    rdfs:comment "Plant de mais avec lesions necrotiques d'helminthosporiose"@fr ;
+    :a_type_plante :monocotyledone ;
+    :appartient_famille :poaceae ;
+    :a_forme_feuille :lineaire_lanceolee ;
+    :a_couleur_feuille :vert_moyen , :beige_brun ;
+    :a_texture_feuille :lisse ;
+    :a_nervation :nervation_parallele ;
+    :a_dimension_feuille :feuille_grande ;
+    :a_type_tige :chaume ;
+    :a_type_racine :racine_fasciculee ;
+    :a_cycle_croissance :annuel ;
+    :a_port :dresse ;
+    :a_etat_sanitaire :malade ;
+    :a_maladie_mais :helminthosporiose_instance ;
+    :presente_symptome :necrose , :taches_foliaires ;
+    :nom_scientifique "Zea mays" ;
+    :nom_local "Kamaana" ;
+    :nom_commun "Mais" ;
+    :hauteur_plante "1.5 a 3 m" ;
+    :longueur_feuille "50 a 100 cm" ;
+    :largeur_feuille "5 a 12 cm" ;
+    :localisation "Burkina Faso" ;
+    :load_date "2025-01-09T00:00:00"^^xsd:dateTime ;
+    :record_source "Collecte terrain LAMI" .
+
+:image2_mais_chenille rdf:type owl:NamedIndividual , :mais ;
+    rdfs:label "Image 2 - Mais attaque par chenille legionnaire"@fr ;
+    :id_image "IMG_MAIS_002" ;
+    rdfs:comment "Plant de mais avec presence de Spodoptera frugiperda"@fr ;
+    :a_type_plante :monocotyledone ;
+    :appartient_famille :poaceae ;
+    :a_forme_feuille :lineaire_lanceolee ;
+    :a_couleur_feuille :vert_clair ;
+    :a_texture_feuille :lisse ;
+    :a_nervation :nervation_parallele ;
+    :a_dimension_feuille :feuille_grande ;
+    :a_type_tige :chaume ;
+    :a_type_racine :racine_fasciculee ;
+    :a_cycle_croissance :annuel ;
+    :a_port :dresse ;
+    :a_etat_sanitaire :malade ;
+    :a_maladie_mais :chenille_legionnaire_instance ;
+    :presente_symptome :perforation ;
+    :nom_scientifique "Zea mays" ;
+    :nom_local "Kamaana" ;
+    :nom_commun "Mais" ;
+    :localisation "Burkina Faso" ;
+    :load_date "2025-01-09T00:00:00"^^xsd:dateTime ;
+    :record_source "Collecte terrain LAMI" .
+
+:image3_mais_sain rdf:type owl:NamedIndividual , :mais ;
+    rdfs:label "Image 3 - Mais sain"@fr ;
+    :id_image "IMG_MAIS_003" ;
+    rdfs:comment "Plant de mais en bonne sante"@fr ;
+    :a_type_plante :monocotyledone ;
+    :appartient_famille :poaceae ;
+    :a_forme_feuille :lineaire_lanceolee ;
+    :a_couleur_feuille :vert_fonce ;
+    :a_texture_feuille :lisse , :cireuse ;
+    :a_nervation :nervation_parallele ;
+    :a_dimension_feuille :feuille_grande ;
+    :a_type_tige :chaume ;
+    :a_type_racine :racine_fasciculee ;
+    :a_cycle_croissance :annuel ;
+    :a_port :dresse ;
+    :a_etat_sanitaire :sain ;
+    :nom_scientifique "Zea mays" ;
+    :nom_local "Kamaana" ;
+    :nom_commun "Mais" ;
+    :hauteur_plante "1.5 a 3 m" ;
+    :longueur_feuille "50 a 100 cm" ;
+    :largeur_feuille "5 a 12 cm" ;
+    :localisation "Burkina Faso" ;
+    :load_date "2025-01-09T00:00:00"^^xsd:dateTime ;
+    :record_source "Collecte terrain LAMI" .
+
+:image4_tomate_acarien rdf:type owl:NamedIndividual , :tomate ;
+    rdfs:label "Image 4 - Tomate avec acariens"@fr ;
+    :id_image "IMG_TOM_001" ;
+    rdfs:comment "Plant de tomate avec chlorose due aux acariens"@fr ;
+    :a_type_plante :dicotyledone ;
+    :appartient_famille :solanaceae ;
+    :a_forme_feuille :composee_pennee ;
+    :a_couleur_feuille :vert_clair , :jaunatre ;
+    :a_texture_feuille :pubescente ;
+    :a_nervation :nervation_reticulee ;
+    :a_dimension_feuille :feuille_moyenne ;
+    :a_type_tige :tige_herbacee ;
+    :a_type_racine :racine_pivotante ;
+    :a_cycle_croissance :annuel ;
+    :a_port :rampant ;
+    :a_etat_sanitaire :malade ;
+    :a_maladie_tomate :acarien_instance ;
+    :presente_symptome :chlorose ;
+    :nom_scientifique "Solanum lycopersicum" ;
+    :nom_local "Tomaate" ;
+    :nom_commun "Tomate" ;
+    :hauteur_plante "0.5 a 2 m" ;
+    :longueur_feuille "20 a 50 cm" ;
+    :localisation "Burkina Faso" ;
+    :load_date "2025-01-09T00:00:00"^^xsd:dateTime ;
+    :record_source "Collecte terrain LAMI" .
+
+#################################################################
+#    RELATIONS SYMPTOMES - COULEURS
+#################################################################
+
+:necrose :modifie_couleur :beige_brun ;
+    :affecte_organe :feuille , :tige .
+
+:chlorose :modifie_couleur :jaunatre , :vert_clair ;
+    :affecte_organe :feuille .
+
+:fletrissement :affecte_organe :feuille , :tige .
+
+:taches_foliaires :modifie_couleur :taches_brunes , :couleur_rouille ;
+    :affecte_organe :feuille .
+
+:perforation :affecte_organe :feuille , :tige , :epi .
+
+:striures :modifie_couleur :jaunatre ;
+    :affecte_organe :feuille .
+
+:pourriture :affecte_organe :racine_organe , :bulbe_organe , :fruit , :collet .
+
+:enroulement :affecte_organe :feuille .
+
+:galle :affecte_organe :tige , :epi , :racine_organe .
+
+:mosaique :modifie_couleur :jaunatre , :vert_clair ;
+    :affecte_organe :feuille .
+
+#################################################################
+#    SWRL RULES POUR INFERENCE (OPTIONNEL)
+#################################################################
+
+# Note: Les regles SWRL peuvent etre ajoutees pour inferer automatiquement
+# certaines relations, par exemple:
+# - Si une plante presente des symptomes X et Y, alors la maladie probable est Z
+# - Si une region a une pluviometrie < 600mm, alors elle est en zone sahelienne
+
+#################################################################
+#    FIN DE L'ONTOLOGIE
+#################################################################

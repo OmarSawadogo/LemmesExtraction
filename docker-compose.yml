@@ -1,0 +1,56 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    networks:
+      - app_network
+    restart: unless-stopped
+    # Pour GPU support sur Linux/WSL2 avec NVIDIA, décommenter:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lemmes_extraction_app
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./data:/app/data
+      - ./exports:/app/exports
+      - ./src:/app/src
+    environment:
+      - PYTHONPATH=/app
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - LLAVA_MODEL=llava:7b
+      - ONTOLOGY_PATH=/app/data/ontology/ontologie_plantes_burkina_faso.ttl
+      - IMAGES_PATH=/app/data/images/
+      - THRESHOLD_ENTITIES=0.75
+      - THRESHOLD_RELATIONS=0.70
+      - THRESHOLD_ATTRIBUTES=0.65
+    depends_on:
+      - ollama
+    networks:
+      - app_network
+    restart: unless-stopped
+    command: python -m src.app
+
+volumes:
+  ollama_data:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge

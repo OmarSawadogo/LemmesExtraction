@@ -1,0 +1,721 @@
+@prefix :  <http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie/> . 
+
+<http://www.semanticweb.org/hp/ontologies/2025/10/planteontolgie> rdf:type owl:Ontology ;
+    rdfs:label "Ontologie des Plantes Agricoles du Burkina Faso"@fr ;
+    rdfs:comment "Ontologie pour les donnees d images de plantes de mais, oignon et tomate au Burkina Faso"@fr . 
+
+#################################################################
+#    CLASSES PRINCIPALES
+#################################################################
+
+:plante rdf:type owl:Class ;
+    rdfs:label "Plante"@fr ;
+    rdfs:comment "Classe parente de toutes les cultures agricoles"@fr .
+
+:mais rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Mais"@fr ;
+    rdfs:comment "Zea mays - Culture cerealiere majeure au Burkina Faso"@fr ;
+    owl:disjointWith :oignon , :tomate .
+
+:oignon rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Oignon"@fr ;
+    rdfs:comment "Allium cepa - Culture maraichere"@fr ;
+    owl:disjointWith :tomate . 
+
+:tomate rdf:type owl:Class ;
+    rdfs:subClassOf :plante ;
+    rdfs:label "Tomate"@fr ;
+    rdfs:comment "Solanum lycopersicum - Culture maraichere"@fr . 
+
+:maladie rdf:type owl:Class ;
+    rdfs:label "Maladie"@fr ;
+    rdfs:comment "Classe representant les maladies et problemes phytosanitaires des plantes"@fr .
+
+:maladie_fongique rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Maladie fongique"@fr ;
+    rdfs:comment "Maladie causee par des champignons"@fr .
+
+:maladie_bacterienne rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Maladie bacterienne"@fr ;
+    rdfs:comment "Maladie causee par des bacteries"@fr . 
+
+:maladie_virale rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Maladie virale"@fr ;
+    rdfs:comment "Maladie causee par des virus"@fr .
+
+:ravageur rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Ravageur"@fr ;
+    rdfs:comment "Insectes, acariens et autres organismes nuisibles aux cultures"@fr .
+
+:stress_abiotique rdf:type owl:Class ;
+    rdfs:subClassOf :maladie ;
+    rdfs:label "Stress abiotique"@fr ;
+    rdfs:comment "Stress cause par des facteurs non-vivants eau nutriments temperature sol"@fr .
+
+#################################################################
+#    CLASSES MORPHOLOGIQUES
+#################################################################
+
+:type_plante rdf:type owl:Class ;
+    rdfs:label "Type de plante"@fr ;
+    rdfs:comment "Classification botanique de la plante"@fr .
+
+:monocotyledone rdf:type owl:Class ;
+    rdfs:subClassOf :type_plante ;
+    rdfs:label "Monocotyledone"@fr ;
+    rdfs:comment "Plante a une seule feuille embryonnaire cotyledon"@fr .
+
+:dicotyledone rdf:type owl:Class ;
+    rdfs:subClassOf :type_plante ;
+    rdfs:label "Dicotyledone"@fr ;
+    rdfs:comment "Plante a deux feuilles embryonnaires cotyledons"@fr .
+
+:famille_botanique rdf:type owl:Class ;
+    rdfs:label "Famille botanique"@fr ;
+    rdfs:comment "Classification taxonomique de la famille de la plante"@fr . 
+
+:poaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Poacees Graminees"@fr ;
+    rdfs:comment "Famille des graminees incluant le mais le mil le sorgho"@fr .
+
+:solanaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Solanacees"@fr ;
+    rdfs:comment "Famille incluant la tomate le piment l aubergine"@fr .
+
+:amaryllidaceae rdf:type owl:Class ;
+    rdfs:subClassOf :famille_botanique ;
+    rdfs:label "Amaryllidacees"@fr ;
+    rdfs:comment "Famille incluant l oignon l ail le poireau"@fr .
+
+:forme_feuille rdf:type owl:Class ;
+    rdfs:label "Forme de feuille"@fr ;
+    rdfs:comment "Morphologie et forme generale de la feuille"@fr .
+
+:lineaire_lanceolee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Lineaire-lanceolee"@fr ;
+    rdfs:comment "Feuille longue etroite et pointue typique du mais"@fr .
+
+:composee_pennee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Composee-pennee"@fr ;
+    rdfs:comment "Feuille divisee en folioles disposees comme une plume typique de la tomate"@fr . 
+
+:tubulaire rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Tubulaire"@fr ;
+    rdfs:comment "Feuille creuse et cylindrique typique de l oignon"@fr .
+
+:simple rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Simple"@fr ;
+    rdfs:comment "Feuille non divisee"@fr .
+
+:lobee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Lobee"@fr ;
+    rdfs:comment "Feuille avec des lobes"@fr .
+
+:dentee rdf:type owl:Class ;
+    rdfs:subClassOf :forme_feuille ;
+    rdfs:label "Dentee"@fr ;
+    rdfs:comment "Feuille avec des bords en forme de dents"@fr .
+
+:couleur_feuille rdf:type owl:Class ;
+    rdfs:label "Couleur de feuille"@fr ;
+    rdfs:comment "Couleur observee sur les feuilles de la plante"@fr . 
+
+:vert_fonce rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Vert fonce"@fr ;
+    rdfs:comment "Couleur normale d une plante saine et bien nourrie"@fr .
+
+:vert_clair rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Vert clair"@fr ;
+    rdfs:comment "Couleur plus claire peut indiquer un debut de stress"@fr .
+
+:vert_moyen rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Vert moyen"@fr ;
+    rdfs:comment "Couleur verte intermediaire"@fr .
+
+:jaunatre rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Jaunatre"@fr ;
+    rdfs:comment "Couleur jaune indiquant une chlorose ou un stress nutritionnel"@fr .
+
+:beige_brun rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Beige Brun"@fr ;
+    rdfs:comment "Couleur indiquant une necrose ou mort des tissus"@fr .
+
+:taches_brunes rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Taches brunes"@fr ;
+    rdfs:comment "Presence de taches brunes sur fond vert"@fr .
+
+:couleur_rouille rdf:type owl:Class ;
+    rdfs:subClassOf :couleur_feuille ;
+    rdfs:label "Couleur rouille"@fr ;
+    rdfs:comment "Couleur orange-brun caracteristique de la rouille"@fr .
+
+:texture_feuille rdf:type owl:Class ;
+    rdfs:label "Texture de feuille"@fr ;
+    rdfs:comment "Caracteristiques tactiles et visuelles de la surface foliaire"@fr .
+
+:lisse rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Lisse"@fr ;
+    rdfs:comment "Surface foliaire sans asperites"@fr .
+
+:pubescente rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Pubescente"@fr ;
+    rdfs:comment "Surface foliaire couverte de petits poils"@fr .
+
+:cireuse rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Cireuse"@fr ;
+    rdfs:comment "Surface foliaire recouverte d une couche cireuse protectrice"@fr .
+
+:rugueuse rdf:type owl:Class ;
+    rdfs:subClassOf :texture_feuille ;
+    rdfs:label "Rugueuse"@fr ;
+    rdfs:comment "Surface foliaire irreguliere au toucher"@fr .
+
+:nervation rdf:type owl:Class ;
+    rdfs:label "Nervation"@fr ;
+    rdfs:comment "Disposition des nervures sur la feuille"@fr .
+
+:nervation_parallele rdf:type owl:Class ;
+    rdfs:subClassOf :nervation ;
+    rdfs:label "Nervation parallele"@fr ;
+    rdfs:comment "Nervures disposees parallelement caracteristique des monocotyledones"@fr . 
+
+:nervation_reticulee rdf:type owl:Class ;
+    rdfs:subClassOf :nervation ;
+    rdfs:label "Nervation reticulee"@fr ;
+    rdfs:comment "Nervures formant un reseau caracteristique des dicotyledones"@fr .
+
+:dimension_feuille rdf:type owl:Class ;
+    rdfs:label "Dimension de feuille"@fr ;
+    rdfs:comment "Taille generale de la feuille"@fr .
+
+:feuille_grande rdf:type owl:Class ;
+    rdfs:subClassOf :dimension_feuille ;
+    rdfs:label "Grande feuille 50-100 cm"@fr ;
+    rdfs:comment "Feuille de grande taille typique du mais"@fr . 
+
+:feuille_moyenne rdf:type owl:Class ;
+    rdfs:subClassOf :dimension_feuille ;
+    rdfs:label "Feuille moyenne 20-50 cm"@fr ;
+    rdfs:comment "Feuille de taille moyenne typique de la tomate"@fr .
+
+:feuille_petite rdf:type owl:Class ;
+    rdfs:subClassOf :dimension_feuille ;
+    rdfs:label "Petite feuille moins de 20 cm"@fr ;
+    rdfs:comment "Feuille de petite taille"@fr .
+
+:type_tige rdf:type owl:Class ;
+    rdfs:label "Type de tige"@fr ;
+    rdfs:comment "Caracteristiques morphologiques de la tige"@fr .
+
+:chaume rdf:type owl:Class ;
+    rdfs:subClassOf :type_tige ;
+    rdfs:label "Chaume"@fr ;
+    rdfs:comment "Tige cylindrique creuse des graminees comme le mais"@fr .
+
+:tige_herbacee rdf:type owl:Class ;
+    rdfs:subClassOf :type_tige ;
+    rdfs:label "Tige herbacee"@fr ;
+    rdfs:comment "Tige souple et non ligneuse"@fr .
+
+:tige_bulbeuse rdf:type owl:Class ;
+    rdfs:subClassOf :type_tige ;
+    rdfs:label "Tige bulbeuse"@fr ;
+    rdfs:comment "Tige modifiee en bulbe comme chez l oignon"@fr .
+
+:type_racine rdf:type owl:Class ;
+    rdfs:label "Type de racine"@fr ;
+    rdfs:comment "Systeme racinaire de la plante"@fr . 
+
+:racine_fasciculee rdf:type owl:Class ;
+    rdfs:subClassOf :type_racine ;
+    rdfs:label "Racine fasciculee"@fr ;
+    rdfs:comment "Racines en touffe sans racine principale typique des monocotyledones"@fr .
+
+:racine_pivotante rdf:type owl:Class ;
+    rdfs:subClassOf :type_racine ;
+    rdfs:label "Racine pivotante"@fr ;
+    rdfs:comment "Racine principale dominante avec ramifications typique des dicotyledones"@fr .
+
+:bulbe rdf:type owl:Class ;
+    rdfs:subClassOf :type_racine ;
+    rdfs:label "Bulbe"@fr ;
+    rdfs:comment "Organe de reserve souterrain comme chez l oignon"@fr . 
+
+:symptome rdf:type owl:Class ;
+    rdfs:label "Symptome"@fr ;
+    rdfs:comment "Signe visible d une maladie ou d un stress sur la plante"@fr . 
+
+:necrose rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Necrose"@fr ;
+    rdfs:comment "Mort des tissus vegetaux zones brunes ou beiges"@fr .
+
+:chlorose rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Chlorose"@fr ;
+    rdfs:comment "Jaunissement des feuilles du a un manque de chlorophylle"@fr . 
+
+:fletrissement rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Fletrissement"@fr ;
+    rdfs:comment "Perte de turgescence des tissus vegetaux"@fr . 
+
+:taches_foliaires rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Taches foliaires"@fr ;
+    rdfs:comment "Presence de taches de differentes couleurs sur les feuilles"@fr . 
+
+:perforation rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Perforation"@fr ;
+    rdfs:comment "Trous dans les feuilles causes par des ravageurs"@fr .
+
+:deformation rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Deformation"@fr ;
+    rdfs:comment "Alteration de la forme normale des organes de la plante"@fr . 
+
+:pourriture rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Pourriture"@fr ;
+    rdfs:comment "Decomposition des tissus vegetaux"@fr .
+
+:nanisme rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Nanisme"@fr ;
+    rdfs:comment "Reduction anormale de la taille de la plante"@fr . 
+
+:striures rdf:type owl:Class ;
+    rdfs:subClassOf :symptome ;
+    rdfs:label "Striures"@fr ;
+    rdfs:comment "Lignes ou bandes de couleur differente sur les feuilles"@fr . 
+
+:etat_sanitaire rdf:type owl:Class ;
+    rdfs:label "Etat sanitaire"@fr ;
+    rdfs:comment "Etat de sante general de la plante"@fr . 
+
+:sain rdf:type owl:Class ;
+    rdfs:subClassOf :etat_sanitaire ;
+    rdfs:label "Sain"@fr ;
+    rdfs:comment "Plante en bonne sante sans symptomes de maladie"@fr . 
+
+:malade rdf:type owl:Class ;
+    rdfs:subClassOf :etat_sanitaire ;
+    rdfs:label "Malade"@fr ;
+    rdfs:comment "Plante presentant des symptomes de maladie"@fr .
+
+:stresse rdf:type owl:Class ;
+    rdfs:subClassOf :etat_sanitaire ;
+    rdfs:label "Stresse"@fr ;
+    rdfs:comment "Plante soumise a un stress environnemental"@fr .
+
+:cycle_croissance rdf:type owl:Class ;
+    rdfs:label "Cycle de croissance"@fr ;
+    rdfs:comment "Duree de vie de la plante"@fr . 
+
+:annuel rdf:type owl:Class ;
+    rdfs:subClassOf :cycle_croissance ;
+    rdfs:label "Annuel"@fr ;
+    rdfs:comment "Plante completant son cycle en une annee ou moins"@fr .
+
+:bisannuel rdf:type owl:Class ;
+    rdfs:subClassOf :cycle_croissance ;
+    rdfs:label "Bisannuel"@fr ;
+    rdfs:comment "Plante completant son cycle en deux annees"@fr .
+
+:vivace rdf:type owl:Class ;
+    rdfs:subClassOf :cycle_croissance ;
+    rdfs:label "Vivace"@fr ;
+    rdfs:comment "Plante vivant plusieurs annees"@fr .
+
+:port_plante rdf:type owl:Class ;
+    rdfs:label "Port de la plante"@fr ;
+    rdfs:comment "Allure generale et mode de croissance de la plante"@fr .
+
+:dresse rdf:type owl:Class ;
+    rdfs:subClassOf :port_plante ;
+    rdfs:label "Dresse"@fr ;
+    rdfs:comment "Plante a croissance verticale"@fr .
+
+:rampant rdf:type owl:Class ;
+    rdfs:subClassOf :port_plante ;
+    rdfs:label "Rampant"@fr ;
+    rdfs:comment "Plante a croissance horizontale au sol"@fr .
+
+:grimpant rdf:type owl:Class ;
+    rdfs:subClassOf :port_plante ;
+    rdfs:label "Grimpant"@fr ;
+    rdfs:comment "Plante necessitant un support pour grimper"@fr .
+
+#################################################################
+#    PROPRIETES D OBJET
+#################################################################
+
+:a_maladie_mais rdf:type owl:ObjectProperty ;
+    rdfs:domain :mais ;
+    rdfs:range :maladie ;
+    rdfs:label "a pour maladie mais"@fr ;
+    rdfs:comment "Relie un plant de mais a sa maladie"@fr . 
+
+:a_maladie_oignon rdf:type owl:ObjectProperty ;
+    rdfs:domain :oignon ;
+    rdfs:range :maladie ;
+    rdfs:label "a pour maladie oignon"@fr ;
+    rdfs:comment "Relie un plant d oignon a sa maladie"@fr .
+
+:a_maladie_tomate rdf:type owl:ObjectProperty ;
+    rdfs:domain :tomate ;
+    rdfs:range :maladie ;
+    rdfs:label "a pour maladie tomate"@fr ;
+    rdfs:comment "Relie un plant de tomate a sa maladie"@fr .
+
+:a_type_plante rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :type_plante ;
+    rdfs:label "a pour type de plante"@fr ;
+    rdfs:comment "Indique si la plante est monocotyledone ou dicotyledone"@fr .
+
+:appartient_famille rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :famille_botanique ;
+    rdfs:label "appartient a la famille"@fr ;
+    rdfs:comment "Indique la famille botanique de la plante"@fr .
+
+:a_forme_feuille rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :forme_feuille ;
+    rdfs:label "a pour forme de feuille"@fr ;
+    rdfs:comment "Decrit la forme des feuilles de la plante"@fr . 
+
+:a_couleur_feuille rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :couleur_feuille ;
+    rdfs:label "a pour couleur de feuille"@fr ;
+    rdfs:comment "Decrit la couleur des feuilles observee"@fr .
+
+:a_texture_feuille rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :texture_feuille ;
+    rdfs:label "a pour texture de feuille"@fr ;
+    rdfs:comment "Decrit la texture de la surface foliaire"@fr . 
+
+:a_nervation rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :nervation ;
+    rdfs:label "a pour nervation"@fr ;
+    rdfs:comment "Decrit le type de nervation des feuilles"@fr . 
+
+:a_dimension_feuille rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :dimension_feuille ;
+    rdfs:label "a pour dimension de feuille"@fr ;
+    rdfs:comment "Indique la taille des feuilles"@fr .
+
+:a_type_tige rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :type_tige ;
+    rdfs:label "a pour type de tige"@fr ;
+    rdfs:comment "Decrit le type de tige de la plante"@fr .
+
+:a_type_racine rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :type_racine ;
+    rdfs:label "a pour type de racine"@fr ;
+    rdfs:comment "Decrit le systeme racinaire de la plante"@fr .
+
+:a_etat_sanitaire rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :etat_sanitaire ;
+    rdfs:label "a pour etat sanitaire"@fr ;
+    rdfs:comment "Indique l etat de sante de la plante"@fr . 
+
+:a_cycle_croissance rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :cycle_croissance ;
+    rdfs:label "a pour cycle de croissance"@fr ;
+    rdfs:comment "Indique le cycle de vie de la plante"@fr . 
+
+:a_port rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :port_plante ;
+    rdfs:label "a pour port"@fr ;
+    rdfs:comment "Decrit le port de la plante"@fr . 
+
+:presente_symptome rdf:type owl:ObjectProperty ;
+    rdfs:domain :plante ;
+    rdfs:range :symptome ;
+    rdfs:label "presente le symptome"@fr ;
+    rdfs:comment "Relie une plante aux symptomes observes"@fr .
+
+:cause_symptome rdf:type owl:ObjectProperty ;
+    rdfs:domain :maladie ;
+    rdfs:range :symptome ;
+    rdfs:label "cause le symptome"@fr ;
+    rdfs:comment "Indique quel symptome est cause par une maladie"@fr .
+
+:modifie_couleur rdf:type owl:ObjectProperty ;
+    rdfs:domain :symptome ;
+    rdfs:range :couleur_feuille ;
+    rdfs:label "modifie la couleur vers"@fr ;
+    rdfs:comment "Indique le changement de couleur cause par un symptome"@fr .
+
+:affecte_culture rdf:type owl:ObjectProperty ;
+    rdfs:domain :maladie ;
+    rdfs:range :plante ;
+    rdfs:label "affecte la culture"@fr ;
+    rdfs:comment "Indique quelle culture est affectee par une maladie"@fr .
+
+#################################################################
+#    PROPRIETES DE DONNEES
+#################################################################
+
+:nom_scientifique rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "nom scientifique"@fr ;
+    rdfs:comment "Nom latin de la plante"@fr . 
+
+:nom_local rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "nom local"@fr ;
+    rdfs:comment "Nom en langue locale du Burkina Faso Moore Dioula Fulfulde"@fr .
+
+:nom_commun rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "nom commun"@fr ;
+    rdfs:comment "Nom usuel de la plante en francais"@fr .
+
+:hauteur_plante rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "hauteur de la plante"@fr ;
+    rdfs:comment "Hauteur moyenne de la plante a maturite"@fr .
+
+:longueur_feuille rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "longueur de feuille"@fr ;
+    rdfs:comment "Longueur moyenne des feuilles"@fr .
+
+:largeur_feuille rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "largeur de feuille"@fr ;
+    rdfs:comment "Largeur moyenne des feuilles"@fr . 
+
+:chemin_image rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "chemin de l image"@fr ;
+    rdfs:comment "Chemin d acces au fichier image"@fr .
+
+:date_capture rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:date ;
+    rdfs:label "date de capture"@fr ;
+    rdfs:comment "Date a laquelle l image a ete prise"@fr .
+
+:localisation rdf:type owl:DatatypeProperty ;
+    rdfs:domain :plante ;
+    rdfs:range xsd:string ;
+    rdfs:label "localisation"@fr ;
+    rdfs:comment "Region ou province du Burkina Faso"@fr .
+
+#################################################################
+#    INSTANCES DE MALADIES
+#################################################################
+
+:helminthosporiose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Helminthosporiose Brulure foliaire du Nord"@fr ;
+    rdfs:comment "Causee par le champignon Exserohilum turcicum provoque des lesions allongees beiges brunes sur les feuilles"@fr ;
+    :cause_symptome :necrose ;
+    :affecte_culture :mais . 
+
+:chenille_legionnaire_instance rdf:type owl:NamedIndividual , :ravageur ;
+    rdfs:label "Chenille legionnaire d automne"@fr ;
+    rdfs:comment "Spodoptera frugiperda Ravageur majeur des cultures cerealieres au Burkina Faso"@fr ;
+    :cause_symptome :perforation ;
+    :affecte_culture :mais .
+
+:rouille_mais_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Rouille du mais"@fr ;
+    rdfs:comment "Causee par Puccinia sorghi provoque des pustules orangees sur les feuilles"@fr ;
+    :cause_symptome :taches_foliaires ;
+    :affecte_culture :mais .
+
+:striure_mais_instance rdf:type owl:NamedIndividual , :maladie_virale ;
+    rdfs:label "Striure du mais"@fr ;
+    rdfs:comment "Causee par le Maize streak virus MSV transmise par la cicadelle"@fr ;
+    :cause_symptome :striures , :chlorose ;
+    :affecte_culture :mais .
+
+:curvulariose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Curvulariose du mais"@fr ;
+    rdfs:comment "Causee par Curvularia spp taches foliaires brunes"@fr ;
+    :cause_symptome :taches_foliaires ;
+    :affecte_culture :mais .
+
+:acarien_instance rdf:type owl:NamedIndividual , :ravageur ;
+    rdfs:label "Acarien tetranyque"@fr ;
+    rdfs:comment "Tetranychus urticae Provoque des decolorations et un jaunissement des feuilles"@fr ;
+    :cause_symptome :chlorose ;
+    :affecte_culture :tomate .
+
+:alternariose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Alternariose de la tomate"@fr ;
+    rdfs:comment "Causee par Alternaria solani provoque des taches concentriques brunes"@fr ;
+    :cause_symptome :necrose , :taches_foliaires ;
+    :affecte_culture :tomate .
+
+:fletrissement_bacterien_instance rdf:type owl:NamedIndividual , :maladie_bacterienne ;
+    rdfs:label "Fletrissement bacterien de la tomate"@fr ;
+    rdfs:comment "Cause par Ralstonia solanacearum provoque un fletrissement rapide"@fr ;
+    :cause_symptome :fletrissement ;
+    :affecte_culture :tomate .
+
+:fusariose_instance rdf:type owl:NamedIndividual , :maladie_fongique ;
+    rdfs:label "Fusariose de la tomate"@fr ;
+    rdfs:comment "Causee par Fusarium oxysporum provoque jaunissement et fletrissement"@fr ;
+    :cause_symptome :fletrissement , :chlorose ;
+    :affecte_culture :tomate .
+
+:chenille_oignon_instance rdf:type owl:NamedIndividual , :ravageur ;
+    rdfs:label "Chenille de l oignon"@fr ;
+    rdfs:comment "Ravageur causant des dommages aux feuilles tubulaires"@fr ;
+    :cause_symptome :perforation ;
+    :affecte_culture :oignon .
+
+#################################################################
+#    INSTANCES BASEES SUR LES 4 IMAGES
+#################################################################
+
+:image1_mais_helminthosporiose rdf:type owl:NamedIndividual , :mais ;
+    rdfs:label "Image 1 Mais avec helminthosporiose"@fr ;
+    rdfs:comment "Plant de mais presentant des lesions necrotiques caracteristiques de l helminthosporiose"@fr ;
+    :a_type_plante :monocotyledone ;
+    :appartient_famille :poaceae ;
+    :a_forme_feuille :lineaire_lanceolee ;
+    :a_couleur_feuille :vert_moyen , :beige_brun ;
+    :a_texture_feuille :lisse ;
+    :a_nervation :nervation_parallele ;
+    :a_dimension_feuille :feuille_grande ;
+    :a_type_tige :chaume ;
+    :a_type_racine :racine_fasciculee ;
+    :a_cycle_croissance :annuel ;
+    :a_port :dresse ;
+    :a_etat_sanitaire :malade ;
+    :a_maladie_mais :helminthosporiose_instance ;
+    :presente_symptome :necrose ;
+    :nom_scientifique "Zea mays" ;
+    :nom_local "Kamaana" ;
+    :nom_commun "Mais" ;
+    :hauteur_plante "1.5 a 3 m" ;
+    :longueur_feuille "50 a 100 cm" ;
+    :largeur_feuille "5 a 12 cm" ;
+    :localisation "Burkina Faso" . 
+
+:image2_mais_chenille rdf:type owl:NamedIndividual , :mais ;
+    rdfs:label "Image 2 Mais attaque par chenille legionnaire"@fr ;
+    rdfs:comment "Plant de mais avec presence visible de la chenille legionnaire Spodoptera frugiperda"@fr ;
+    :a_type_plante :monocotyledone ;
+    :appartient_famille :poaceae ;
+    :a_forme_feuille :lineaire_lanceolee ;
+    :a_couleur_feuille :vert_clair ;
+    :a_texture_feuille :lisse ;
+    :a_nervation :nervation_parallele ;
+    :a_dimension_feuille :feuille_grande ;
+    :a_type_tige :chaume ;
+    :a_type_racine :racine_fasciculee ;
+    :a_cycle_croissance :annuel ;
+    :a_port :dresse ;
+    :a_etat_sanitaire :malade ;
+    :a_maladie_mais :chenille_legionnaire_instance ;
+    :presente_symptome :perforation ;
+    :nom_scientifique "Zea mays" ;
+    :nom_local "Kamaana" ;
+    :nom_commun "Mais" ;
+    :localisation "Burkina Faso" .
+
+:image3_mais_sain rdf:type owl:NamedIndividual , :mais ;
+    rdfs:label "Image 3 Mais sain"@fr ;
+    rdfs:comment "Plant de mais en bonne sante avec un feuillage vert fonce brillant"@fr ;
+    :a_type_plante :monocotyledone ;
+    :appartient_famille :poaceae ;
+    :a_forme_feuille :lineaire_lanceolee ;
+    :a_couleur_feuille :vert_fonce ;
+    :a_texture_feuille :lisse , :cireuse ;
+    :a_nervation :nervation_parallele ;
+    :a_dimension_feuille :feuille_grande ;
+    :a_type_tige :chaume ;
+    :a_type_racine :racine_fasciculee ;
+    :a_cycle_croissance :annuel ;
+    :a_port :dresse ;
+    :a_etat_sanitaire :sain ;
+    :nom_scientifique "Zea mays" ;
+    :nom_local "Kamaana" ;
+    :nom_commun "Mais" ;
+    :hauteur_plante "1.5 a 3 m" ;
+    :longueur_feuille "50 a 100 cm" ;
+    :largeur_feuille "5 a 12 cm" ;
+    :localisation "Burkina Faso" .
+
+:image4_tomate_acarien rdf:type owl:NamedIndividual , :tomate ;
+    rdfs:label "Image 4 Tomate avec acariens"@fr ;
+    rdfs:comment "Plant de tomate presentant des symptomes de chlorose dus aux acariens tetranyques"@fr ;
+    :a_type_plante :dicotyledone ;
+    :appartient_famille :solanaceae ;
+    :a_forme_feuille :composee_pennee ;
+    :a_couleur_feuille :vert_clair , :jaunatre ;
+    :a_texture_feuille :pubescente ;
+    :a_nervation :nervation_reticulee ;
+    :a_dimension_feuille :feuille_moyenne ;
+    :a_type_tige :tige_herbacee ;
+    :a_type_racine :racine_pivotante ;
+    :a_cycle_croissance :annuel ;
+    :a_port :rampant ;
+    :a_etat_sanitaire :malade ;
+    :a_maladie_tomate :acarien_instance ;
+    :presente_symptome :chlorose ;
+    :nom_scientifique "Solanum lycopersicum" ;
+    :nom_local "Tomaate" ;
+    :nom_commun "Tomate" ;
+    :hauteur_plante "0.5 a 2 m" ;
+    :longueur_feuille "20 a 50 cm" ;
+    :localisation "Burkina Faso" .
+
+#################################################################
+#    RELATIONS SYMPTOMES COULEURS
+#################################################################
+
+:necrose :modifie_couleur :beige_brun .
+:chlorose :modifie_couleur :jaunatre .

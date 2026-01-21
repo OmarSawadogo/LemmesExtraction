@@ -1,0 +1,404 @@
+@prefix : <http://www.semanticweb.org/ontologies/2025/plantontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@base <http://www.semanticweb.org/ontologies/2025/plantontology/> .
+
+<http://www.semanticweb.org/ontologies/2025/plantontology/> rdf:type owl:Ontology ;
+    dc:title "Plant Disease Ontology - Burkina Faso"@en ;
+    dc:title "Ontologie des Maladies des Plantes - Burkina Faso"@fr ;
+    dc:description "Ontologie structurée selon le modèle Data Vault pour le diagnostic des maladies du maïs, de la tomate et de l'oignon au Burkina Faso"@fr ;
+    dc:creator "SOS-LAMI" ;
+    owl:versionInfo "2.0.0" .
+
+#################################################################
+#                         HUBS (Entités Métier)
+#################################################################
+
+# ================== HUB: Plant ==================
+:Hub_Plant rdf:type owl:Class ;
+    rdfs:label "Hub Plant"@en ;
+    rdfs:label "Hub Plante"@fr ;
+    rdfs:comment "Hub central représentant les types de plantes cultivées"@fr .
+
+:Corn rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Plant ;
+    rdfs:label "Corn"@en ;
+    rdfs:label "Maïs"@fr ;
+    owl:disjointWith :Onion, :Tomato .
+
+:Onion rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Plant ;
+    rdfs:label "Onion"@en ;
+    rdfs:label "Oignon"@fr ;
+    owl:disjointWith :Tomato .
+
+:Tomato rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Plant ;
+    rdfs:label "Tomato"@en ;
+    rdfs:label "Tomate"@fr .
+
+# ================== HUB: Disease ==================
+:Hub_Disease rdf:type owl:Class ;
+    rdfs:label "Hub Disease"@en ;
+    rdfs:label "Hub Maladie"@fr ;
+    rdfs:comment "Hub central représentant les maladies des plantes"@fr .
+
+# --- Catégories de maladies ---
+:FungalDisease rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Disease ;
+    rdfs:label "Fungal Disease"@en ;
+    rdfs:label "Maladie Fongique"@fr .
+
+:BacterialDisease rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Disease ;
+    rdfs:label "Bacterial Disease"@en ;
+    rdfs:label "Maladie Bactérienne"@fr .
+
+:ViralDisease rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Disease ;
+    rdfs:label "Viral Disease"@en ;
+    rdfs:label "Maladie Virale"@fr .
+
+:AbioticStress rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Disease ;
+    rdfs:label "Abiotic Stress"@en ;
+    rdfs:label "Stress Abiotique"@fr .
+
+:Pest rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_Disease ;
+    rdfs:label "Pest"@en ;
+    rdfs:label "Ravageur"@fr .
+
+# ================== HUB: HealthStatus ==================
+:Hub_HealthStatus rdf:type owl:Class ;
+    rdfs:label "Hub Health Status"@en ;
+    rdfs:label "Hub État de Santé"@fr ;
+    rdfs:comment "État de santé de la plante"@fr .
+
+:Healthy rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_HealthStatus ;
+    rdfs:label "Healthy"@en ;
+    rdfs:label "Sain"@fr .
+
+:Diseased rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_HealthStatus ;
+    rdfs:label "Diseased"@en ;
+    rdfs:label "Malade"@fr .
+
+:Stressed rdf:type owl:Class ;
+    rdfs:subClassOf :Hub_HealthStatus ;
+    rdfs:label "Stressed"@en ;
+    rdfs:label "Stressé"@fr .
+
+#################################################################
+#              INSTANCES DE MALADIES (Hub_Disease)
+#################################################################
+
+# --- Maladies du Maïs ---
+:Helminthosporiose rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Helminthosporiose"@fr ;
+    rdfs:label "Northern Corn Leaf Blight"@en ;
+    :affectsPlant :Corn .
+
+:Rouille rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Rouille"@fr ;
+    rdfs:label "Rust"@en ;
+    :affectsPlant :Corn .
+
+:Curvulariose rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Curvulariose"@fr ;
+    rdfs:label "Curvularia Leaf Spot"@en ;
+    :affectsPlant :Corn .
+
+:Striure rdf:type owl:NamedIndividual, :ViralDisease ;
+    rdfs:label "Striure"@fr ;
+    rdfs:label "Maize Streak Virus"@en ;
+    :affectsPlant :Corn .
+
+:ViroseMais rdf:type owl:NamedIndividual, :ViralDisease ;
+    rdfs:label "Virose du Maïs"@fr ;
+    rdfs:label "Corn Virus"@en ;
+    :affectsPlant :Corn .
+
+:StressAbiotiqueMais rdf:type owl:NamedIndividual, :AbioticStress ;
+    rdfs:label "Stress Abiotique Maïs"@fr ;
+    rdfs:label "Corn Abiotic Stress"@en ;
+    :affectsPlant :Corn .
+
+# --- Maladies de la Tomate ---
+:Alternariose rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Alternariose"@fr ;
+    rdfs:label "Early Blight"@en ;
+    :affectsPlant :Tomato .
+
+:Fusariose rdf:type owl:NamedIndividual, :FungalDisease ;
+    rdfs:label "Fusariose"@fr ;
+    rdfs:label "Fusarium Wilt"@en ;
+    :affectsPlant :Tomato .
+
+:BacterialWilt rdf:type owl:NamedIndividual, :BacterialDisease ;
+    rdfs:label "Flétrissement Bactérien"@fr ;
+    rdfs:label "Bacterial Wilt"@en ;
+    :affectsPlant :Tomato .
+
+:Acarien rdf:type owl:NamedIndividual, :Pest ;
+    rdfs:label "Acarien"@fr ;
+    rdfs:label "Spider Mite"@en ;
+    :affectsPlant :Tomato .
+
+:AlternarioseAcarien rdf:type owl:NamedIndividual, :Hub_Disease ;
+    rdfs:label "Alternariose + Acarien"@fr ;
+    rdfs:label "Early Blight + Spider Mite"@en ;
+    rdfs:comment "Infection combinée"@fr ;
+    :affectsPlant :Tomato .
+
+:StressAbiotiqueTomato rdf:type owl:NamedIndividual, :AbioticStress ;
+    rdfs:label "Stress Abiotique Tomate"@fr ;
+    rdfs:label "Tomato Abiotic Stress"@en ;
+    :affectsPlant :Tomato .
+
+# --- Maladies de l'Oignon ---
+:ChenilleOignon rdf:type owl:NamedIndividual, :Pest ;
+    rdfs:label "Chenille de l'Oignon"@fr ;
+    rdfs:label "Onion Caterpillar"@en ;
+    :affectsPlant :Onion .
+
+:StressAbiotiqueOignon rdf:type owl:NamedIndividual, :AbioticStress ;
+    rdfs:label "Stress Abiotique Oignon"@fr ;
+    rdfs:label "Onion Abiotic Stress"@en ;
+    :affectsPlant :Onion .
+
+#################################################################
+#                    LINKS (Relations)
+#################################################################
+
+# ================== LINK: Plant-Disease ==================
+:Link_Plant_Disease rdf:type owl:Class ;
+    rdfs:label "Link Plant Disease"@en ;
+    rdfs:label "Lien Plante-Maladie"@fr ;
+    rdfs:comment "Relation entre une plante et une maladie diagnostiquée"@fr .
+
+# --- Object Properties pour les Links ---
+:affectsPlant rdf:type owl:ObjectProperty ;
+    rdfs:label "affects plant"@en ;
+    rdfs:label "affecte la plante"@fr ;
+    rdfs:domain :Hub_Disease ;
+    rdfs:range :Hub_Plant .
+
+:hasDisease rdf:type owl:ObjectProperty ;
+    rdfs:label "has disease"@en ;
+    rdfs:label "a la maladie"@fr ;
+    rdfs:domain :Hub_Plant ;
+    rdfs:range :Hub_Disease ;
+    owl:inverseOf :affectsPlant .
+
+:hasHealthStatus rdf:type owl:ObjectProperty ;
+    rdfs:label "has health status"@en ;
+    rdfs:label "a l'état de santé"@fr ;
+    rdfs:domain :Hub_Plant ;
+    rdfs:range :Hub_HealthStatus .
+
+# ================== LINK: Diagnosis ==================
+:Link_Diagnosis rdf:type owl:Class ;
+    rdfs:label "Link Diagnosis"@en ;
+    rdfs:label "Lien Diagnostic"@fr ;
+    rdfs:comment "Relation représentant un diagnostic effectué"@fr .
+
+:diagnosedPlant rdf:type owl:ObjectProperty ;
+    rdfs:label "diagnosed plant"@en ;
+    rdfs:label "plante diagnostiquée"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range :Hub_Plant .
+
+:diagnosedDisease rdf:type owl:ObjectProperty ;
+    rdfs:label "diagnosed disease"@en ;
+    rdfs:label "maladie diagnostiquée"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range :Hub_Disease .
+
+:diagnosedStatus rdf:type owl:ObjectProperty ;
+    rdfs:label "diagnosed status"@en ;
+    rdfs:label "état diagnostiqué"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range :Hub_HealthStatus .
+
+#################################################################
+#              SATELLITES (Attributs Descriptifs)
+#################################################################
+
+# ================== SAT: Plant Details ==================
+:Sat_Plant_Details rdf:type owl:Class ;
+    rdfs:label "Satellite Plant Details"@en ;
+    rdfs:label "Satellite Détails Plante"@fr ;
+    rdfs:comment "Attributs descriptifs des plantes"@fr .
+
+:hasPlantDetails rdf:type owl:ObjectProperty ;
+    rdfs:domain :Hub_Plant ;
+    rdfs:range :Sat_Plant_Details .
+
+# Data Properties pour Sat_Plant_Details
+:scientificName rdf:type owl:DatatypeProperty ;
+    rdfs:label "scientific name"@en ;
+    rdfs:label "nom scientifique"@fr ;
+    rdfs:domain :Hub_Plant ;
+    rdfs:range xsd:string .
+
+:localName rdf:type owl:DatatypeProperty ;
+    rdfs:label "local name"@en ;
+    rdfs:label "nom local"@fr ;
+    rdfs:domain :Hub_Plant ;
+    rdfs:range rdf:langString .
+
+:growingSeason rdf:type owl:DatatypeProperty ;
+    rdfs:label "growing season"@en ;
+    rdfs:label "saison de culture"@fr ;
+    rdfs:domain :Hub_Plant ;
+    rdfs:range xsd:string .
+
+:plantFamily rdf:type owl:DatatypeProperty ;
+    rdfs:label "plant family"@en ;
+    rdfs:label "famille botanique"@fr ;
+    rdfs:domain :Hub_Plant ;
+    rdfs:range xsd:string .
+
+# ================== SAT: Disease Details ==================
+:Sat_Disease_Details rdf:type owl:Class ;
+    rdfs:label "Satellite Disease Details"@en ;
+    rdfs:label "Satellite Détails Maladie"@fr ;
+    rdfs:comment "Attributs descriptifs des maladies"@fr .
+
+:hasDiseaseDetails rdf:type owl:ObjectProperty ;
+    rdfs:domain :Hub_Disease ;
+    rdfs:range :Sat_Disease_Details .
+
+# Data Properties pour Sat_Disease_Details
+:symptoms rdf:type owl:DatatypeProperty ;
+    rdfs:label "symptoms"@en ;
+    rdfs:label "symptômes"@fr ;
+    rdfs:domain :Hub_Disease ;
+    rdfs:range rdf:langString .
+
+:causativeAgent rdf:type owl:DatatypeProperty ;
+    rdfs:label "causative agent"@en ;
+    rdfs:label "agent causal"@fr ;
+    rdfs:domain :Hub_Disease ;
+    rdfs:range xsd:string .
+
+:treatment rdf:type owl:DatatypeProperty ;
+    rdfs:label "treatment"@en ;
+    rdfs:label "traitement"@fr ;
+    rdfs:domain :Hub_Disease ;
+    rdfs:range rdf:langString .
+
+:preventionMeasures rdf:type owl:DatatypeProperty ;
+    rdfs:label "prevention measures"@en ;
+    rdfs:label "mesures de prévention"@fr ;
+    rdfs:domain :Hub_Disease ;
+    rdfs:range rdf:langString .
+
+:severity rdf:type owl:DatatypeProperty ;
+    rdfs:label "severity"@en ;
+    rdfs:label "sévérité"@fr ;
+    rdfs:domain :Hub_Disease ;
+    rdfs:range xsd:string .
+
+# ================== SAT: Diagnosis Details ==================
+:Sat_Diagnosis_Details rdf:type owl:Class ;
+    rdfs:label "Satellite Diagnosis Details"@en ;
+    rdfs:label "Satellite Détails Diagnostic"@fr ;
+    rdfs:comment "Attributs descriptifs d'un diagnostic"@fr .
+
+:hasDiagnosisDetails rdf:type owl:ObjectProperty ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range :Sat_Diagnosis_Details .
+
+# Data Properties pour Sat_Diagnosis_Details
+:diagnosisDate rdf:type owl:DatatypeProperty ;
+    rdfs:label "diagnosis date"@en ;
+    rdfs:label "date du diagnostic"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range xsd:dateTime .
+
+:confidenceScore rdf:type owl:DatatypeProperty ;
+    rdfs:label "confidence score"@en ;
+    rdfs:label "score de confiance"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range xsd:decimal .
+
+:imagePath rdf:type owl:DatatypeProperty ;
+    rdfs:label "image path"@en ;
+    rdfs:label "chemin de l'image"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range xsd:string .
+
+:diagnosticMethod rdf:type owl:DatatypeProperty ;
+    rdfs:label "diagnostic method"@en ;
+    rdfs:label "méthode de diagnostic"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range xsd:string .
+
+:location rdf:type owl:DatatypeProperty ;
+    rdfs:label "location"@en ;
+    rdfs:label "localisation"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range xsd:string .
+
+:recommendedAction rdf:type owl:DatatypeProperty ;
+    rdfs:label "recommended action"@en ;
+    rdfs:label "action recommandée"@fr ;
+    rdfs:domain :Link_Diagnosis ;
+    rdfs:range rdf:langString .
+
+#################################################################
+#         ANNOTATIONS DES INSTANCES (Satellites peuplés)
+#################################################################
+
+# --- Détails Maïs ---
+:Corn :scientificName "Zea mays"^^xsd:string ;
+    :localName "Kaaba"@dyu ;
+    :plantFamily "Poaceae"^^xsd:string ;
+    :growingSeason "Mai-Octobre"^^xsd:string .
+
+# --- Détails Tomate ---
+:Tomato :scientificName "Solanum lycopersicum"^^xsd:string ;
+    :localName "Tomaati"@dyu ;
+    :plantFamily "Solanaceae"^^xsd:string ;
+    :growingSeason "Novembre-Mars"^^xsd:string .
+
+# --- Détails Oignon ---
+:Onion :scientificName "Allium cepa"^^xsd:string ;
+    :localName "Jaba"@dyu ;
+    :plantFamily "Amaryllidaceae"^^xsd:string ;
+    :growingSeason "Octobre-Février"^^xsd:string .
+
+# --- Détails Maladies ---
+:Helminthosporiose :symptoms "Taches foliaires allongées, grises à brunes, nécrose des feuilles"@fr ;
+    :causativeAgent "Exserohilum turcicum"^^xsd:string ;
+    :treatment "Fongicides à base de mancozèbe ou azoxystrobine"@fr ;
+    :preventionMeasures "Rotation des cultures, variétés résistantes, élimination des résidus"@fr ;
+    :severity "moderate"^^xsd:string .
+
+:Rouille :symptoms "Pustules orangées à brunes sur les feuilles"@fr ;
+    :causativeAgent "Puccinia sorghi"^^xsd:string ;
+    :treatment "Fongicides systémiques (triazoles)"@fr ;
+    :preventionMeasures "Variétés résistantes, surveillance précoce"@fr ;
+    :severity "moderate"^^xsd:string .
+
+:Alternariose :symptoms "Taches concentriques brunes sur feuilles, collet noir sur fruits"@fr ;
+    :causativeAgent "Alternaria solani"^^xsd:string ;
+    :treatment "Fongicides (chlorothalonil, mancozèbe)"@fr ;
+    :preventionMeasures "Paillage, espacement, rotation 3 ans"@fr ;
+    :severity "high"^^xsd:string .
+
+:BacterialWilt :symptoms "Flétrissement rapide, brunissement vasculaire"@fr ;
+    :causativeAgent "Ralstonia solanacearum"^^xsd:string ;
+    :treatment "Pas de traitement curatif, arrachage des plants infectés"@fr ;
+    :preventionMeasures "Sol sain, rotation longue, variétés résistantes"@fr ;
+    :severity "critical"^^xsd:string .
+
+###  Generated by SOS-LAMI - Data Vault Architecture for Plant Ontology

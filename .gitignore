@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# Exports générés
+exports/*.json
+exports/*.ttl
+exports/*.sql
+exports/*.rdf
+
+# Cache modèles
+.cache/
+.sentence_transformers/
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Données temporaires
+tmp/
+temp/
+
+# Plans Claude
+.claude/

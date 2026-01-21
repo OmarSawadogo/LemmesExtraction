@@ -1,0 +1,34 @@
+# LLM et Vision
+ollama
+
+# Ontologie et RDF
+rdflib
+
+# API HTTP pour Ollama embeddings
+requests
+
+# Similarité lexicale
+jellyfish
+Unidecode
+
+# Interface utilisateur
+gradio
+
+# Manipulation de données
+pandas
+numpy
+
+# Acceleration GPU (optionnel - installer selon votre version CUDA)
+# Pour CUDA 12.x: pip install cupy-cuda12x
+# Pour CUDA 11.x: pip install cupy-cuda11x
+# cupy-cuda12x
+
+# Traitement d'images
+Pillow
+
+# Configuration
+python-dotenv
+
+# Utilitaires
+pydantic
+python-dateutil
