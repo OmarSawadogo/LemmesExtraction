@@ -7,15 +7,14 @@ rdflib
 # API HTTP pour Ollama embeddings
 requests
 
-# Similarité lexicale
+# Similarite lexicale
 jellyfish
 Unidecode
 
 # Interface utilisateur
 gradio
 
-# Manipulation de données
-pandas
+# Calculs numeriques
 numpy
 
 # Acceleration GPU (optionnel - installer selon votre version CUDA)
@@ -23,12 +22,5 @@ numpy
 # Pour CUDA 11.x: pip install cupy-cuda11x
 # cupy-cuda12x
 
-# Traitement d'images
-Pillow
-
 # Configuration
 python-dotenv
-
-# Utilitaires
-pydantic
-python-dateutil
