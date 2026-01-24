@@ -1,54 +1,8 @@
 # Systeme d'Extraction de Connaissances de Plantes Agricoles
 
-Systeme d'extraction automatique de connaissances a partir d'images de plantes agricoles du Burkina Faso (mais, oignon, tomate). Combine des LLM locaux via Ollama (LLaVA, Qwen2.5-VL, Llama3.2-Vision) et une ontologie de domaine pour produire un schema structure Data Vault.
+Systeme d'extraction automatique de connaissances a partir d'images de plantes agricoles du Burkina Faso (mais, oignon, tomate). Combine des LLM locaux via Ollama (LLaVA, Qwen3-VL, Llama3.2-Vision) et une ontologie de domaine pour produire un schema structure Data Vault.
 
-## Fonctionnalites
 
-- **Analyse d'images** de plantes avec modeles de vision (LLaVA, Qwen, Llama)
-- **Extraction automatique** de lemmes descriptifs
-- **Classification ontologique** guidee (Hubs, Links, Satellites)
-- **Calcul de similarite** hybride (lexicale + semantique)
-- **Schema Data Vault** structure et valide
-- **Exports multi-formats** : JSON, RDF/Turtle, SQL
-- **Interface Gradio** interactive
-- **Execution locale** avec Docker et Ollama
-
-## Architecture
-
-```
-Image de plante
-      |
-      v
-+-----------------------------------+
-| ETAPE 1: Extraction LLM (LLaVA)   |
-| Lemmes: [mais, malade, necrose]   |
-+-----------------------------------+
-      |
-      v
-+-----------------------------------+
-| ETAPE 2: Classification           |
-| REGLE 1: Hubs (Entites)           |
-| REGLE 2: Links (Relations)        |
-| REGLE 3: Satellites (Attributs)   |
-+-----------------------------------+
-      |
-      v
-+-----------------------------------+
-| ETAPE 3: Calcul de Similarite     |
-| - Lexicale (Jaro-Winkler)         |
-| - Semantique (Embeddings)         |
-+-----------------------------------+
-      |
-      v
-+-----------------------------------+
-| ETAPE 4: Schema Data Vault        |
-| - Hubs, Links, Satellites         |
-| - Validation, Metadonnees         |
-+-----------------------------------+
-      |
-      v
-  JSON  RDF  SQL
-```
 
 ## Prerequis
 
@@ -72,12 +26,17 @@ cp .env.example .env
 # 3. Lancer les services
 docker-compose up --build -d
 
-# 4. Telecharger les modeles LLM
-docker-compose exec ollama ollama pull llava:7b          # 4-5 GB RAM
-docker-compose exec ollama ollama pull qwen2.5vl:latest  # 6 GB RAM
-docker-compose exec ollama ollama pull llama3.2-vision:latest  # 7-8 GB RAM
+# 4. Telecharger les modeles LLM (vision)
+docker-compose exec ollama ollama pull llava:7b                # 4.7 GB
+docker-compose exec ollama ollama pull qwen3-vl:latest         # 6.1 GB
+docker-compose exec ollama ollama pull llama3.2-vision:latest  # 7.8 GB
+docker-compose exec ollama ollama pull llava:13b               # 8.0 GB (optionnel)
 
-# 5. Verifier les logs
+# 5. Telecharger les modeles d'embeddings
+docker-compose exec ollama ollama pull nextfire/paraphrase-multilingual-minilm:l12-v2  # 120 MB
+docker-compose exec ollama ollama pull nomic-embed-text:latest                          # 274 MB (optionnel)
+
+# 6. Verifier les logs
 docker-compose logs -f app
 ```
 
@@ -192,14 +151,23 @@ EMBEDDING_MODEL=nextfire/paraphrase-multilingual-minilm:l12-v2
 SIMILARITY_ALGORITHM=hybrid
 ```
 
-## Comparaison des modeles
+## Modeles disponibles
 
-| Modele | RAM | Vitesse | Precision | Usage |
-|--------|-----|---------|-----------|-------|
-| llava:7b | 4-5 GB | Rapide | Bonne | Tests, machines limitees |
-| qwen2.5vl:latest | 6 GB | Tres rapide | Tres bonne | Recommande |
-| llama3.2-vision | 7-8 GB | Rapide | Tres bonne | Usage general |
-| llava:13b | 10 GB | Moyen | Excellente | Production |
+### Modeles de vision (LLM)
+
+| Modele | Taille | Vitesse | Precision | Usage |
+|--------|--------|---------|-----------|-------|
+| llava:7b | 4.7 GB | Rapide | Bonne | Tests, machines limitees |
+| qwen3-vl:latest | 6.1 GB | Tres rapide | Tres bonne | Recommande |
+| llama3.2-vision:latest | 7.8 GB | Rapide | Tres bonne | Usage general |
+| llava:13b | 8.0 GB | Moyen | Excellente | Production |
+
+### Modeles d'embeddings
+
+| Modele | Taille | Usage |
+|--------|--------|-------|
+| nextfire/paraphrase-multilingual-minilm:l12-v2 | 120 MB | Defaut, multilingue |
+| nomic-embed-text:latest | 274 MB | Alternative |
 
 ## Depannage
 
@@ -225,7 +193,8 @@ docker-compose exec ollama ollama list
 
 ## Technologies
 
-- **LLM/Vision:** Ollama (LLaVA, Qwen, Llama Vision)
+- **LLM/Vision:** Ollama (LLaVA 7b/13b, Qwen3-VL, Llama3.2-Vision)
+- **Embeddings:** nextfire/paraphrase-multilingual-minilm, nomic-embed-text
 - **Ontologie:** RDFLib
 - **Similarite:** Jellyfish (Jaro-Winkler), Embeddings Ollama
 - **Interface:** Gradio
