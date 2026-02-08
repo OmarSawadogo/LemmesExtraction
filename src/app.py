@@ -525,30 +525,46 @@ def _format_results_by_hub(hubs: list, links: list, satellites: list) -> str:
         elif hub.entity_type in ('maladie', 'ravageur'):
             hub_probleme = hub
 
-    # Afficher le Hub plante
-    if hub_plante:
-        output += f"HUB plante: {hub_plante.business_key}\n\n"
+    # Regrouper les satellites par hub_key
+    satellites_by_hub = {}
+    for sat in satellites:
+        satellites_by_hub.setdefault(sat.hub_key, []).append(sat)
 
-    # Afficher le Link et le Hub problème
+    # Fonction helper pour afficher les satellites d'un hub
+    def _format_satellites(hub, indent="   "):
+        lines = ""
+        for sat in satellites_by_hub.get(hub.hub_key, []):
+            if sat.confidence_score < 1.0:
+                lines += f"{indent}SATELLITE {sat.attribute_name} (score: {sat.confidence_score:.2f}): {sat.attribute_value}\n"
+            else:
+                lines += f"{indent}SATELLITE {sat.attribute_name}: {sat.attribute_value}\n"
+        return lines
+
+    # Afficher le Hub plante avec ses satellites
+    if hub_plante:
+        output += f"HUB plante: {hub_plante.business_key}\n"
+        plant_sats = _format_satellites(hub_plante)
+        if plant_sats:
+            output += plant_sats
+        output += "\n"
+
+    # Afficher le Link
     if links:
         link = links[0]
         output += f"   LINK relation: {link.relation_type}\n\n"
 
+    # Afficher le Hub problème avec ses satellites
     if hub_probleme:
-        output += f"   HUB {hub_probleme.entity_type}: {hub_probleme.business_key}\n\n"
-
-    # Afficher tous les Satellites
-    for sat in satellites:
-        # Vérifier si c'est un match par similarité (score < 1.0)
-        if sat.confidence_score < 1.0:
-            output += f"   SATELLITE {sat.attribute_name} (score: {sat.confidence_score:.2f}): {sat.attribute_value}\n"
-        else:
-            output += f"   SATELLITE {sat.attribute_name}: {sat.attribute_value}\n"
+        output += f"   HUB {hub_probleme.entity_type}: {hub_probleme.business_key}\n"
+        problem_sats = _format_satellites(hub_probleme, "   ")
+        if problem_sats:
+            output += problem_sats
+        output += "\n"
 
     # Afficher le résumé du Link créé
     if hub_plante and hub_probleme and links:
         link = links[0]
-        output += f"\n   LINK créé: {hub_plante.business_key} --{link.relation_type}--> {hub_probleme.business_key}\n"
+        output += f"   LINK créé: {hub_plante.business_key} --{link.relation_type}--> {hub_probleme.business_key}\n"
 
     output += "```\n"
 
@@ -676,7 +692,7 @@ with gr.Blocks(title="Extraction de Connaissances - Plantes", theme=theme, css="
 
                 with gr.Accordion("Configuration", open=False):
                     model_selector = gr.Dropdown(
-                        choices=["llava:7b", "llava:13b", "qwen3-vl:latest", "llama3.2-vision:latest"],
+                        choices=["llava:7b",  "qwen3-vl:latest"],
                         value="llava:7b",
                         label="Modèle",
                         info="Sélectionner le modèle"
@@ -756,7 +772,7 @@ with gr.Blocks(title="Extraction de Connaissances - Plantes", theme=theme, css="
 
                 with gr.Accordion("Configuration", open=False):
                     batch_model_selector = gr.Dropdown(
-                        choices=["llava:7b", "llava:13b", "qwen3-vl:latest", "llama3.2-vision:latest"],
+                        choices=["llava:7b", "qwen3-vl:latest"],
                         value="llava:7b",
                         label="Modèle",
                         info="Sélectionner le modèle"

@@ -335,22 +335,35 @@ class OntologyMatcher:
             # Plante saine, pas de problème
             print(f"   Plante saine détectée")
 
-        # Phase 3: Créer les objets Satellite
+        # Phase 3: Créer les objets Satellite - distribuer entre hubs
+        # Symptomes → hub maladie/ravageur (décrivent le problème)
+        # Morphologie + état foliaire → hub plante (décrivent la plante)
         final_satellites: List[Satellite] = []
-        primary_hub = plante_hub or (hubs_list[0] if hubs_list else None)
+        DISEASE_SAT_TYPES = {'symptome'}
+        PLANT_SAT_TYPES = {'etat_foliaire', 'couleur', 'forme', 'texture', 'nervation', 'description'}
 
-        if primary_hub:
-            for sat_data in satellites_list:
-                if isinstance(sat_data, tuple):
-                    lemma, attr_type = sat_data
-                    satellite = Satellite(
-                        hub_key=primary_hub.hub_key,
-                        attribute_name=attr_type,
-                        attribute_value=lemma.lower(),
-                        record_source=image_source,
-                        confidence_score=0.95
-                    )
-                    final_satellites.append(satellite)
+        for sat_data in satellites_list:
+            if isinstance(sat_data, tuple):
+                lemma, attr_type = sat_data
+
+                # Déterminer le hub parent selon le type d'attribut
+                if attr_type in DISEASE_SAT_TYPES and probleme_hub:
+                    parent_hub = probleme_hub
+                elif plante_hub:
+                    parent_hub = plante_hub
+                elif hubs_list:
+                    parent_hub = hubs_list[0]
+                else:
+                    continue
+
+                satellite = Satellite(
+                    hub_key=parent_hub.hub_key,
+                    attribute_name=attr_type,
+                    attribute_value=lemma.lower(),
+                    record_source=image_source,
+                    confidence_score=0.95
+                )
+                final_satellites.append(satellite)
 
         print(f"   [RESULTAT] Hubs={len(hubs_list)}, Links={len(links_list)}, Satellites={len(final_satellites)}")
 
